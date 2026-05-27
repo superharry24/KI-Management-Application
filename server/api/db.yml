@@ -1,0 +1,5 @@
+host: localhost
+database: Kesher Management
+user: Kesher
+password: Kesher
+port: 5433
