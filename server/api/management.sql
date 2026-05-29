@@ -35,13 +35,14 @@ CREATE TABLE items (
     name VARCHAR(30) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     category_id INT NOT NULL REFERENCES categories(id),
-    Current_amount INT NOT NULL,
+    current_amount INT NOT NULL,
     order_level INT NOT NULL,
     unit_size INT NOT NULL,
     unit_cost NUMERIC(10,2) NOT NULL,
     item_cost NUMERIC(10,2) NOT NULL,
     location VARCHAR(30) NOT NULL,
-    supplier VARCHAR(30) NOT NULL
+    supplier VARCHAR(30) NOT NULL,
+    SKU VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE item_update_log (
@@ -57,12 +58,14 @@ CREATE TABLE tasks (
     category_id INT NOT NULL REFERENCES categories(id),
     priority INT NOT NULL,
     repeat_interval INT,
+    created_date TIMESTAMP NOT NULL,
+    repeat_threshold TIMESTAMP NOT NULL,
     description VARCHAR(300),
     location VARCHAR(30) NOT NULL,
     image BYTEA,
     status VARCHAR(30) NOT NULL
 );
-
+/*interval meassured in days*/
 CREATE TABLE task_assigned_staff (
     task_id INT REFERENCES tasks(id) ON DELETE CASCADE,
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -128,9 +131,26 @@ CREATE TABLE event_large_items (
     PRIMARY KEY(event_id, large_item_id)
 );
 
-/*Keep as example for now
-INSERT INTO ingredients(name, category, calories, total_fat, saturated_fat, trans_fat, protein, carbohydrate)	
-        VALUES ('steak', 'Proteins', 300, 5.73, 2.183, 0.182, 29.44, 0.0),
-        ('tortilla', 'Grains', 120, 0.5, 0.1, 0.0, 1.1, 8.5);
+/* for testing, remove when launched */
+INSERT INTO categories(name)	
+        VALUES ('cleaning'),
+        ('cooking');
 
-*/
+INSERT INTO items(name, category_id, current_amount, order_level, unit_size, unit_cost, item_cost, location, supplier)	
+        VALUES ('Soap',1, 5, 2, 1, 1.15, 1.15, 'bathroom', 'jerry'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
+        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve');
+
