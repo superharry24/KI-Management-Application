@@ -40,11 +40,16 @@ def exec_get_all(sql, args={}):
     conn.close()
     return list_of_tuples
 
-def exec_commit(sql, args={}):
+def exec_commit(sql, args={}, returning=False):
     #print("exec_commit:\n" + sql+"\n")
     conn = connect()
     cur = conn.cursor()
-    result = cur.execute(sql, args)
+    cur.execute(sql, args)
+    result = None
+
+    if returning:
+        result = cur.fetchone()[0]
+
     conn.commit()
     conn.close()
     return result

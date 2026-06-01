@@ -1,5 +1,4 @@
 /*remove before sending out*/
-DROP table if EXISTS categories CASCADE;
 DROP table if EXISTS users CASCADE;
 DROP table if EXISTS items CASCADE;
 DROP table if EXISTS item_update_log CASCADE;
@@ -14,10 +13,7 @@ DROP table if EXISTS events CASCADE;
 DROP table if EXISTS event_small_items CASCADE;
 DROP table if EXISTS event_large_items CASCADE;
 
-CREATE TABLE categories(
-    id   SERIAL PRIMARY KEY NOT NULL,
-    name VARCHAR(30) NOT NULL
-);
+
 
 
 CREATE TABLE users(
@@ -34,12 +30,12 @@ CREATE TABLE items (
     id   SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
-    category_id INT NOT NULL REFERENCES categories(id),
+    category VARCHAR(30) NOT NULL,
     current_amount INT NOT NULL,
     order_level INT NOT NULL,
     unit_size INT NOT NULL,
     unit_cost NUMERIC(10,2) NOT NULL,
-    item_cost NUMERIC(10,2) NOT NULL,
+    item_description VARCHAR(300) NOT NULL,
     location VARCHAR(30) NOT NULL,
     supplier VARCHAR(30) NOT NULL,
     SKU VARCHAR(30) NOT NULL
@@ -47,15 +43,18 @@ CREATE TABLE items (
 
 CREATE TABLE item_update_log (
     id   SERIAL PRIMARY KEY NOT NULL,
-    item_id INT NOT NULL REFERENCES items(id) ,
+    item_id INT NOT NULL REFERENCES items(id),
     user_id INT NOT NULL REFERENCES users(id),
-    last_update_date TIMESTAMP NOT NULL
+    change_amount INT DEFAULT 0,
+    delete BOOLEAN DEFAULT FALSE,
+    edit BOOLEAN DEFAULT FALSE,
+    date TIMESTAMP NOT NULL
 );
 
 CREATE TABLE tasks (
     id   SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
-    category_id INT NOT NULL REFERENCES categories(id),
+    category_id VARCHAR(30) NOT NULL,
     priority INT NOT NULL,
     repeat_interval INT,
     created_date TIMESTAMP NOT NULL,
@@ -132,25 +131,13 @@ CREATE TABLE event_large_items (
 );
 
 /* for testing, remove when launched */
-INSERT INTO categories(name)	
-        VALUES ('cleaning'),
-        ('cooking');
 
-INSERT INTO items(name, category_id, current_amount, order_level, unit_size, unit_cost, item_cost, location, supplier)	
-        VALUES ('Soap',1, 5, 2, 1, 1.15, 1.15, 'bathroom', 'jerry'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve'),
-        ('Soup',2, 10, 2, 2, 5, 2.25, 'kitchen', 'steve');
+
+INSERT INTO items(name, category, current_amount, order_level, unit_size, unit_cost, item_description, location, supplier, SKU)	
+        VALUES ('Soap','cleaning', 5, 2, 1, 1.15, 1.15, 'bathroom', 'jerry', 4),
+        ('Soup','cooking', 10, 2, 2, 5, 2.25, 'kitchen', 'steve', 2),
+        ('Soyp','cleaning', 5, 2, 1, 1.15, 1.15, 'bathroom', 'jerry', 4);
+        
+INSERT INTO users(name, password_hash, admin)	
+        VALUES ('Harry', 'dfdg', TRUE);
 
