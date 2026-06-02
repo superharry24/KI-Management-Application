@@ -4,6 +4,7 @@ import AddItemModal from "./AddItemModal";
 import IncreaseItemModal from "./IncreaseItemModal";
 import DecreaseItemModal from "./DecreaseItemModal";
 import EditItemModal from "./EditItemModal";
+import DeleteItemModal from "./DeleteItemModal";
 class Page extends React.Component {
 
     constructor(props) {
@@ -21,6 +22,7 @@ class Page extends React.Component {
             sortField: "Alphabetical",
             sortDirection: "ASC",
             perfectMatch: false,
+            prioritizeLowStock: false,
 
             // MODAL STATE
             showSortModal: false,
@@ -30,6 +32,7 @@ class Page extends React.Component {
 
     componentDidMount() {
         this.fetchData();
+        this.sortList();
     }
 
     addItem = async (itemData) => {
@@ -211,6 +214,49 @@ class Page extends React.Component {
     };
 
 
+    deleteItem = async () => {
+        const itemData = {
+            userID: this.state.userID,
+            type: 4,//deactivating
+            item_id: this.state.selectedItem[0],
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+
+            const response = await fetch("http://localhost:5000/inventory", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(itemData)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to increase item");
+            }
+
+            const result = await response.json();
+
+            console.log("Item decreased:", result);
+
+            // Refresh inventory list
+            await this.fetchData();
+            await this.sortList();
+
+            // Close modal
+            this.setState({
+                OpenModal: "none"
+            });
+
+        } catch (error) {
+
+            console.log("Decrease item error:", error);
+
+        }
+    };
+
+
     updateData = (data) => {
         this.setState({ list: data });
     }
@@ -291,9 +337,21 @@ class Page extends React.Component {
                 return value.includes(search);
             });
         }
+        
 
         // SORT FIELD
         updatedList.sort((a, b) => {
+
+
+
+            if (this.state.prioritizeLowStock) {
+                const aLow = a[4] < a[5];
+                const bLow = b[4] < b[5];
+
+                if (aLow !== bLow) {
+                    return aLow ? -1 : 1;
+                }
+            }
 
             let valueA;
             let valueB;
@@ -400,7 +458,7 @@ class Page extends React.Component {
                         padding: "5px"
                     }}>
                         <span>Name</span>
-                        <span>Current Amount</span>
+                        <span>Units on Hand</span>
                     </div>
 
                     <div
@@ -445,7 +503,20 @@ class Page extends React.Component {
                                                 : "white"
                                 }}
                             >
-                                <span>{item[1]}</span>
+                                <span>
+                                    {item[1]}
+                                    {(item[4] < item[5]) && (
+                                        <span
+                                            style={{
+                                                color: "red",
+                                                marginLeft: "8px",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            ⚠ Low Stock
+                                        </span>
+                                    )}
+                                </span>
                                 <span>{item[4]}</span>
                             </div>
                         ))}
@@ -513,6 +584,7 @@ class Page extends React.Component {
                                     border: "none",
                                     borderRadius: "4px"
                                 }}
+                                onClick={() => this.setState({ OpenModal: "delete" })}
                             >
                                 
                                 Delete Item
@@ -587,7 +659,7 @@ class Page extends React.Component {
                                 <h3>{this.state.selectedItem[1]}</h3>
 
                                 <p><b>Category:</b> {this.state.selectedItem[3]}</p>
-                                <p><b>Current Amount:</b> {this.state.selectedItem[4]}</p>
+                                <p><b>Units on Hand:</b> {this.state.selectedItem[4]}</p>
                                 <p><b>Order Level:</b> {this.state.selectedItem[5]}</p>
                                 <p><b>Unit Size:</b> {this.state.selectedItem[6]}</p>
                                 <p><b>Unit Cost:</b> ${this.state.selectedItem[7]}</p>                                
@@ -623,6 +695,7 @@ class Page extends React.Component {
                         <DecreaseItemModal
                             isOpen={this.state.OpenModal == "decrease"}
                             onClose={() => this.setState({ OpenModal: "none" })}
+                            item={this.state.selectedItem?.[4]}
                             onSubmit={(data) => {
                                 this.decreaseItem(data);
                             }}
@@ -634,6 +707,12 @@ class Page extends React.Component {
                             onSubmit={(data) => {
                                 this.editItem(data);
                             }}
+                        />
+                        <DeleteItemModal
+                            isOpen={this.state.OpenModal == "delete"}
+                            item={this.state.selectedItem?.[4]}
+                            onClose={() => this.setState({ OpenModal: "none" })}
+                            onSubmit={this.deleteItem}
                         />
                     </div>
 
@@ -652,6 +731,7 @@ class Page extends React.Component {
                                 sortField: data.sortBy,
                                 sortDirection: data.sortDirection,
                                 perfectMatch: data.perfectMatch,
+                                prioritizeLowStock: data.lowStock,
                                 showSortModal: false
                             },
                             () => {

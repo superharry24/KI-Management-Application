@@ -9,6 +9,7 @@ export default function SortListModal({
   const [sortDirection, setSortDirection] = useState("ASC");
   const [sortBy, setSortBy] = useState("Alphabetical");
   const [perfectMatch, setPerfectMatch] = useState(false);
+  const [lowStock, setLowStock] = useState(false);
 
   if (!isOpen) return null;
 
@@ -18,6 +19,7 @@ export default function SortListModal({
       sortDirection,
       sortBy,
       perfectMatch,
+      lowStock,
     });
   };
 
@@ -82,6 +84,27 @@ export default function SortListModal({
                 />
 
                 Perfect Match
+
+            </label>
+
+            <label
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    cursor: "pointer"
+                }}
+            >
+                <input
+                    type="checkbox"
+                    checked={lowStock}
+                    onChange={(e) =>
+                        setLowStock(e.target.checked)
+                    }
+                />
+
+                Prioritize Low Stock
+
             </label>
         </div>
 
@@ -122,7 +145,7 @@ export default function SortListModal({
               }}
             >
               <option value="Alphabetical">Alphabetical</option>
-              <option value="Current Amount">Current Amount</option>
+              <option value="Current Amount">Units On Hand</option>
               <option value="Category">Category</option>
               <option value="Unit Cost">Unit Cost</option>
               <option value="Location">Location</option>

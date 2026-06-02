@@ -63,7 +63,7 @@ class IncreaseItemModal extends React.Component {
         return (
             <div style={styles.backdrop}>
                 <div style={styles.modal}>
-                    <h3 style={{ marginTop: 0 }}>Increase Item Amount</h3>
+                    <h3 style={{ marginTop: 0 }}>Units Received</h3>
 
                     <div style={styles.form}>
                         <input

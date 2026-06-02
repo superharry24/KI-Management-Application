@@ -28,9 +28,9 @@ def clean_data(rows):
 #make api for all tables
 class InventoryApi(Resource):
     def get(self):
-        result1 = exec_get_all("SELECT * FROM items")
+        result1 = exec_get_all("SELECT * FROM items WHERE active = TRUE")
         result2 = exec_get_all("SELECT * FROM categories")
-        result3 = exec_get_all("SELECT * FROM users")
+        result3 = exec_get_all("SELECT * FROM users WHERE active = TRUE")
         result4 = exec_get_all("SELECT * FROM item_update_log")
         result = [clean_data(result1), clean_data(result2), clean_data(result3), clean_data(result4)]
         return result
@@ -42,7 +42,7 @@ class InventoryApi(Resource):
         parser.add_argument('currentAmount', type=int)
         parser.add_argument('orderLevel', type=int)
         parser.add_argument('location', type=str)
-        parser.add_argument('unitSize', type=int)
+        parser.add_argument('unitSize', type=str)
         parser.add_argument('unitCost', type=int)
         parser.add_argument('supplier', type=str)
         parser.add_argument('sku', type=str)
@@ -100,7 +100,7 @@ class InventoryApi(Resource):
             parser.add_argument('category', type=str)
             parser.add_argument('orderLevel', type=int)
             parser.add_argument('location', type=str)
-            parser.add_argument('unitSize', type=int)
+            parser.add_argument('unitSize', type=str)
             parser.add_argument('unitCost', type=int)
             parser.add_argument('supplier', type=str)
             parser.add_argument('sku', type=str)
@@ -129,6 +129,25 @@ class InventoryApi(Resource):
                 """
             exec_commit(sql,(args['item_id'], args['userID'], args['timestamp'], True))
             return {"status": "edited"}, 201
+        elif(args['type'] == 4):            
+            parser.add_argument('userID', type=int)    
+            parser.add_argument('type', type=int)        
+            parser.add_argument('item_id', type=int)
+            parser.add_argument('timestamp', type=str)
+            args = parser.parse_args() 
+            sql = """
+                UPDATE items
+                SET active	= FALSE
+                WHERE id = %s
+                """
+            exec_commit(sql,(args['item_id'],))
+            sql = """
+                INSERT INTO item_update_log(item_id, user_id, date, delete)	
+                VALUES (%s, %s, %s, TRUE)
+                """
+            exec_commit(sql,(args['item_id'], args['userID'], args['timestamp']))
+            if args['type'] == 1:
+                return {"status": "increased"}, 201
         
 
 

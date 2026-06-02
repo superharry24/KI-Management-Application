@@ -45,7 +45,7 @@ class EditItemModal extends React.Component {
   
     handleSubmit = () => {
             const {itemName, category, orderLevel, unitSize, unitCost, location, supplier, sku, description} = this.state;
-            if(itemName == '' || category == '' || orderLevel < 0 || unitSize <=0 || unitCost < 0 || location == '' || supplier == '' || sku == '' || description == '')
+            if(itemName == '' || category == '' || orderLevel < 0 || unitSize <=0 || unitCost == ''|| location == '' || supplier == '' || sku == '' || description == '')
             {
                 this.setState({
                     error: "Empty Field Detected"
@@ -54,7 +54,7 @@ class EditItemModal extends React.Component {
             else
             {
                 const data = {
-                itemName, category, orderLevel: Number(orderLevel), unitSize: Number(unitSize), unitCost: Number(unitCost), location, supplier, sku, description};
+                itemName, category, orderLevel: Number(orderLevel), unitSize, unitCost: Number(unitCost), location, supplier, sku, description};
 
                 this.props.onSubmit(data);
                 this.props.onClose();

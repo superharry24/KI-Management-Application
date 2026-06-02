@@ -1,22 +1,20 @@
 import React from "react";
 
-class DecreaseItemModal extends React.Component {
+class DeleteItemModal extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            error: "",
+        this.state = {            
             amount: 0,
-            curStock: 0
+            error: ""
         };
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.isOpen && this.props.isOpen) {
+        if (this.props.isOpen && !prevProps.isOpen) {
             this.setState({
-                amount: 0,
-                error: "",
-                curStock: this.props.item
+                amount: this.props.item,
+                error: ""
             });
         }
     }
@@ -31,37 +29,16 @@ class DecreaseItemModal extends React.Component {
   
     handleSubmit = () => {
             const {amount} = this.state;
-            const {curStock} = this.state;
             const numAmount = Number(amount);
-            const curAmount = Number(curStock);
-            if (isNaN(numAmount)) {
+            if (numAmount != 0) {
                 this.setState({
-                    error: "Please enter a valid number"
-                });
-            }
-            else if(numAmount == 0)
-            {
-                this.setState({
-                    error: "Cannot change by zero"
-                });
-            }
-            else if(numAmount < 0)
-            {
-                this.setState({
-                    error: "Cannot input negative number"
-                });
-            }
-            else if(numAmount > curAmount)
-            {
-                this.setState({
-                    error: "There is not enough of this item in stock. If you have used the last of it, set this to 0, otherwise, set current amount to the accurate value."
+                    error: "Cannot delete item that's still in stock, please reduce stock to 0 before deleting"
                 });
             }
             else
             {
-                const data = {amount: numAmount,};
 
-                this.props.onSubmit(data);
+                this.props.onSubmit();
                 this.props.onClose();
             }
             
@@ -73,17 +50,8 @@ class DecreaseItemModal extends React.Component {
         return (
             <div style={styles.backdrop}>
                 <div style={styles.modal}>
-                    <h3 style={{ marginTop: 0 }}>Decrease Item Amount</h3>
+                    <h3 style={{ marginTop: 0 }}>Are you sure you want to delete this item from the database? (This cannot be undone)</h3>
 
-                    <div style={styles.form}>
-                        <input
-                        type="number"
-                        name="amount"
-                        value={this.state.amount}
-                        onChange={this.handleChange}
-                        style={inputStyle}
-                    />
-                    </div>
 
                     {this.state.error && (
                         <div style={{ color: "red", marginBottom: "8px" }}>
@@ -96,7 +64,7 @@ class DecreaseItemModal extends React.Component {
                         </button>
 
                         <button onClick={this.handleSubmit} style={styles.submit}>
-                            Submit
+                            Delete
                         </button>                        
                     </div>
                 </div>
@@ -133,7 +101,7 @@ const styles = {
     },
     submit: {
         flex: 1,
-        background: "#4caf50",
+        background: "#f44336",
         color: "white",
         border: "none",
         padding: "6px",
@@ -142,8 +110,8 @@ const styles = {
     },
     cancel: {
         flex: 1,
-        background: "#f44336",
-        color: "white",
+        background: "#b0acac",
+        color: "black",
         border: "none",
         padding: "6px",
         borderRadius: "4px",
@@ -160,4 +128,4 @@ const inputStyle = {
     color: "#333"
 };
 
-export default DecreaseItemModal;
+export default DeleteItemModal;

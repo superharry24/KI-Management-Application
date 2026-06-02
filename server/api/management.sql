@@ -33,7 +33,7 @@ CREATE TABLE items (
     category VARCHAR(30) NOT NULL,
     current_amount INT NOT NULL,
     order_level INT NOT NULL,
-    unit_size INT NOT NULL,
+    unit_size VARCHAR(30) NOT NULL,
     unit_cost NUMERIC(10,2) NOT NULL,
     item_description VARCHAR(300) NOT NULL,
     location VARCHAR(30) NOT NULL,
