@@ -10,6 +10,7 @@ export default function SortListModal({
   const [sortBy, setSortBy] = useState("Alphabetical");
   const [perfectMatch, setPerfectMatch] = useState(false);
   const [lowStock, setLowStock] = useState(false);
+  const [lowStockOnly, setLowStockOnly] = useState(false);
 
   if (!isOpen) return null;
 
@@ -20,6 +21,7 @@ export default function SortListModal({
       sortBy,
       perfectMatch,
       lowStock,
+      lowStockOnly,
     });
   };
 
@@ -104,6 +106,25 @@ export default function SortListModal({
                 />
 
                 Prioritize Low Stock
+
+            </label>
+            <label
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    cursor: "pointer"
+                }}
+            >
+                <input
+                    type="checkbox"
+                    checked={lowStockOnly}
+                    onChange={(e) =>
+                        setLowStockOnly(e.target.checked)
+                    }
+                />
+
+                Only Show Low Stock
 
             </label>
         </div>

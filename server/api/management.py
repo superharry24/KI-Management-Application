@@ -29,10 +29,7 @@ def clean_data(rows):
 class InventoryApi(Resource):
     def get(self):
         result1 = exec_get_all("SELECT * FROM items WHERE active = TRUE")
-        result2 = exec_get_all("SELECT * FROM categories")
-        result3 = exec_get_all("SELECT * FROM users WHERE active = TRUE")
-        result4 = exec_get_all("SELECT * FROM item_update_log")
-        result = [clean_data(result1), clean_data(result2), clean_data(result3), clean_data(result4)]
+        result = [clean_data(result1)]
         return result
 
     def post(self):
@@ -89,7 +86,7 @@ class InventoryApi(Resource):
                 INSERT INTO item_update_log(item_id, user_id, date, change_amount)	
                 VALUES (%s, %s, %s, %s)
                 """
-            exec_commit(sql,(args['item_id'], args['userID'], args['timestamp'], args['amount']))
+            exec_commit(sql,(args['item_id'], args['userID'], args['timestamp'], -args['amount']))
             if args['type'] == 1:
                 return {"status": "increased"}, 201
             elif args['type'] == 2:
@@ -149,7 +146,26 @@ class InventoryApi(Resource):
             if args['type'] == 1:
                 return {"status": "increased"}, 201
         
-
+class UpdateLogApi(Resource):
+    def get(self):
+        sql= """SELECT
+                l.id AS log_id,
+                l.item_id,
+                i.name AS item_name,      
+                l.user_id,
+                u.name AS user_name,  
+                l.change_amount,
+                l.delete,
+                l.edit,
+                l.date
+            FROM item_update_log l
+            JOIN items i
+                ON l.item_id = i.id
+            JOIN users u
+                ON l.user_id = u.id
+            ORDER BY l.date DESC;"""
+        result = clean_data(exec_get_all(sql))
+        return result
 
 class TasksManageApi(Resource):
     def get(self):

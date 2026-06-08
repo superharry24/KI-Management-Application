@@ -54,7 +54,7 @@ CREATE TABLE item_update_log (
 CREATE TABLE tasks (
     id   SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
-    category_id VARCHAR(30) NOT NULL,
+    category VARCHAR(30) NOT NULL,
     priority INT NOT NULL,
     repeat_interval INT,
     created_date TIMESTAMP NOT NULL,

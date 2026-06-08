@@ -73,16 +73,46 @@ class AddItemModal extends React.Component {
                     <h3 style={{ marginTop: 0 }}>Add New Item</h3>
 
                     <div style={styles.form}>
-                        <input name="itemName" placeholder="Item Name" onChange={this.handleChange} style={inputStyle} />
-                        <input name="category" placeholder="Category" onChange={this.handleChange} style={inputStyle} />
-                        <input name="currentAmount" placeholder="Current Amount" onChange={this.handleChange} style={inputStyle} />
-                        <input name="orderLevel" placeholder="Order Level" onChange={this.handleChange} style={inputStyle} />
-                        <input name="unitSize" placeholder="Unit Size" onChange={this.handleChange} style={inputStyle} />
-                        <input name="unitCost" placeholder="Unit Cost" onChange={this.handleChange} style={inputStyle} />
-                        <input name="location" placeholder="Location" onChange={this.handleChange} style={inputStyle} />
-                        <input name="supplier" placeholder="Supplier" onChange={this.handleChange} style={inputStyle} />
-                        <input name="sku" placeholder="SKU" onChange={this.handleChange} style={inputStyle} />
-                        <input name="description" placeholder="Description" onChange={this.handleChange} style={inputStyle} />
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Item Name:</label>
+                            <input name="itemName" placeholder="Item Name" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Category:</label>
+                            <input name="category" placeholder="Category" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Current Amount:</label>
+                            <input type="number" name="currentAmount" placeholder="Current Amount" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Order Level:</label>
+                            <input type="number" name="orderLevel" placeholder="Order Level" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Unit Size:</label>
+                            <input name="unitSize" placeholder="Unit Size" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Unit Cost:</label>
+                            <input type="number" name="unitCost" placeholder="Unit Cost" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Location:</label>
+                            <input name="location" placeholder="Location" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Supplier:</label>
+                            <input name="supplier" placeholder="Supplier" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>SKU:</label>
+                            <input name="sku" placeholder="SKU" onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Description:</label>
+                            <input name="description" placeholder="Description" onChange={this.handleChange} style={inputStyle} />
+                        </div>
                     </div>
 
                     {this.state.error && (
@@ -148,7 +178,19 @@ const styles = {
         padding: "6px",
         borderRadius: "4px",
         cursor: "pointer"
+    },
+    field: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "2px"
+    },
+    label: {
+        color: "white",
+        fontSize: "14px",
+        textAlign: "left",
+        marginBottom: "2px"
     }
+
 
 };
 

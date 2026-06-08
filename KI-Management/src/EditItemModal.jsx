@@ -73,15 +73,42 @@ class EditItemModal extends React.Component {
                     <h3 style={{ marginTop: 0 }}>Edit Current Item</h3>
 
                     <div style={styles.form}>
-                        <input name="itemName" value={this.state.itemName} placeholder="Item Name" onChange={this.handleChange} style={inputStyle} />
-                        <input name="category" value={this.state.category} placeholder="Category" onChange={this.handleChange} style={inputStyle} />
-                        <input name="orderLevel" value={this.state.orderLevel} placeholder="Order Level" onChange={this.handleChange} style={inputStyle} />
-                        <input name="unitSize" value={this.state.unitSize} placeholder="Unit Size" onChange={this.handleChange} style={inputStyle} />
-                        <input name="unitCost" value={this.state.unitCost} placeholder="Unit Cost" onChange={this.handleChange} style={inputStyle} />
-                        <input name="location" value={this.state.location} placeholder="Location" onChange={this.handleChange} style={inputStyle} />
-                        <input name="supplier" value={this.state.supplier} placeholder="Supplier" onChange={this.handleChange} style={inputStyle} />
-                        <input name="sku" value={this.state.sku} placeholder="SKU" onChange={this.handleChange} style={inputStyle} />
-                        <input name="description" value={this.state.description} placeholder="Description" onChange={this.handleChange} style={inputStyle} />
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Item Name:</label>
+                            <input name="itemName" placeholder="Item Name" value={this.state.itemName} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Category:</label>
+                            <input name="category" placeholder="Category" value={this.state.category} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Order Level:</label>
+                            <input type="number" name="orderLevel" placeholder="Order Level" value={this.state.orderLevel} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Unit Size:</label>
+                            <input name="unitSize" placeholder="Unit Size" value={this.state.unitSize} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Unit Cost:</label>
+                            <input type="number" name="unitCost" placeholder="Unit Cost" value={this.state.unitCost} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Location:</label>
+                            <input name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Supplier:</label>
+                            <input name="supplier" placeholder="Supplier" value={this.state.supplier} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>SKU:</label>
+                            <input name="sku" placeholder="SKU" value={this.state.sku} onChange={this.handleChange} style={inputStyle} />
+                        </div>
+                        <div style={styles.field}>
+                            <label style = {styles.label}>Description:</label>
+                            <input name="description" placeholder="Description" value={this.state.description} onChange={this.handleChange} style={inputStyle} />
+                        </div>
                     </div>
 
                     {this.state.error && (
@@ -146,6 +173,17 @@ const styles = {
         padding: "6px",
         borderRadius: "4px",
         cursor: "pointer"
+    },
+    field: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "2px"
+    },
+    label: {
+        color: "white",
+        fontSize: "14px",
+        textAlign: "left",
+        marginBottom: "2px"
     }
 
 };
