@@ -223,7 +223,7 @@ class Inventory extends React.Component {
 
     exportList = async (data) => {
         const format = data.format;
-        const list = this.state.list?.[0] || [];
+        const list = this.state.list || [];
 
         const timestamp = new Date().toLocaleString();
 
@@ -268,7 +268,7 @@ class Inventory extends React.Component {
         // name, sku, on hand, supplier
         else if(format === "Excel")
         {
-            const list = this.state.list?.[0] || [];
+            const list = this.state.list || [];
 
             const data = list.map(item => ({
                 Name: item[1],
@@ -324,7 +324,7 @@ class Inventory extends React.Component {
 
             const result = await response.json();
 
-            console.log("Item decreased:", result);
+            console.log("Item deleted:", result);
 
             // Refresh inventory list
             await this.fetchData();
@@ -367,8 +367,8 @@ class Inventory extends React.Component {
         });
 
         const freshData = await this.fetchData();
-        if (!freshData || !freshData[0]) return;
-        let updatedList = [...freshData[0]];
+        if (!freshData) return;
+        let updatedList = [...freshData];
 
         // FILTER USING SEARCH TEXT
         if (this.state.sortText.trim() !== "") {
@@ -501,18 +501,13 @@ class Inventory extends React.Component {
                 : -comparison;
         });
 
-    this.setState((prevState) => ({
-        list: [
-            updatedList,
-            prevState.list[1]
-        ]
-    }));
+    this.setState({
+        list: updatedList
+    });
 }
 
     render() {
-        const categories = Object.fromEntries(
-            (this.state.list?.[1] || []).map(cat => [cat[0], cat])
-        );
+        
 
         return (
             <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
@@ -560,7 +555,7 @@ class Inventory extends React.Component {
                             overflowY: "auto"
                         }}
                     >
-                        {this.state.list?.[0]?.map((item, index) => (
+                        {this.state.list?.map((item, index) => (
                             <div
                                 key={index}
                                 onClick={() => {

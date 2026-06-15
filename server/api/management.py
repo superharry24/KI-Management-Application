@@ -29,7 +29,7 @@ def clean_data(rows):
 class InventoryApi(Resource):
     def get(self):
         result1 = exec_get_all("SELECT * FROM items WHERE active = TRUE")
-        result = [clean_data(result1)]
+        result = clean_data(result1)
         return result
 
     def post(self):
@@ -54,8 +54,8 @@ class InventoryApi(Resource):
             """
         itemID = exec_commit(sql,(args['itemName'],args['category'],args['currentAmount'],args['orderLevel'],args['unitSize'],args['unitCost'],(args['description']),args['location'],args['supplier'],args['sku']), returning = True)
         sql = """
-            INSERT INTO item_update_log(item_id, user_id, date, change_amount)	
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO item_update_log(item_id, user_id, date, change_amount, created)	
+            VALUES (%s, %s, %s, %s, TRUE)
             """
         exec_commit(sql,(itemID, args['userID'], args['timestamp'], args['currentAmount']))
         return {"status": "created"}, 201
@@ -71,11 +71,14 @@ class InventoryApi(Resource):
             parser.add_argument('item_id', type=int)
             parser.add_argument('timestamp', type=str)
             args = parser.parse_args()
+            amount = 0
             new_ammount = exec_get_one("SELECT current_amount FROM items WHERE id = %s",(args['item_id'],))[0]
             if args['type'] == 1:
                 new_ammount += args['amount']
+                amount = args['amount']
             elif args['type'] == 2:
                 new_ammount -= args['amount']
+                amount = -args['amount']
             sql = """
                 UPDATE items
                 SET current_amount	= %s
@@ -86,7 +89,7 @@ class InventoryApi(Resource):
                 INSERT INTO item_update_log(item_id, user_id, date, change_amount)	
                 VALUES (%s, %s, %s, %s)
                 """
-            exec_commit(sql,(args['item_id'], args['userID'], args['timestamp'], -args['amount']))
+            exec_commit(sql,(args['item_id'], args['userID'], args['timestamp'], amount))
             if args['type'] == 1:
                 return {"status": "increased"}, 201
             elif args['type'] == 2:
@@ -157,7 +160,8 @@ class UpdateLogApi(Resource):
                 l.change_amount,
                 l.delete,
                 l.edit,
-                l.date
+                l.date,
+                l.created
             FROM item_update_log l
             JOIN items i
                 ON l.item_id = i.id
@@ -179,50 +183,7 @@ class UsersApi(Resource):
     def put(self):
         x = 8
 
-class ItemsApi(Resource):
-    def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('id', type=int)
-        parser.add_argument('text', type=str)
-        parser.add_argument('category', type=str)
-        
-        args = parser.parse_args()
-        sql = """
-            UPDATE ingredients 
-            SET name = %s,
-              category = %s,
-              calories = %s,
-              total_fat = %s,
-              saturated_fat = %s,
-              trans_fat = %s,
-              protein = %s,
-              carbohydrate = %s
-              WHERE id = %s
-            """
-        exec_commit(sql,(args['name'],args['category'],args['calories'],args['totalFat'],args['satFat'],args['transFat'],args['protein'],args['carbs'],args['id']))
-        return {"status": "updated"}, 200
 
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str)
-        parser.add_argument('category', type=str)
-        
-        args = parser.parse_args()
-        sql = """
-            INSERT INTO ingredients(name, category, calories, total_fat, saturated_fat, trans_fat, protein, carbohydrate)	
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            """
-        exec_commit(sql,(args['name'],args['category'],args['calories'],args['totalFat'],args['satFat'],args['transFat'],args['protein'],args['carbs']))
-        return {"status": "created"}, 201
-    
-    def delete(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('id', type=int, required=True, help="Ingredient ID is required")
-        args = parser.parse_args()
-        sql = "DELETE FROM ingredients WHERE id = %s"
-        exec_commit(sql, (args['id'],))
-        return {"status": "deleted"}, 200
-        
         
 class TasksApi(Resource):
     def put(self):

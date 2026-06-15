@@ -14,14 +14,16 @@ api.add_resource(UpdateLogApi,'/updateLog')
 api.add_resource(TasksManageApi,'/tasks')
 api.add_resource(EventsManageApi,'/events')
 api.add_resource(UsersApi,'/user')
-api.add_resource(ItemsApi,'/item')
 api.add_resource(RoomsApi,'/room')
 api.add_resource(TasksApi,'/task')
 api.add_resource(LargeItemsApi,'/table')
 api.add_resource(SmallItemsApi,'/chair')
 api.add_resource(EventsApi,'/event')
 
+
+
 if __name__ == '__main__':
+
     print("Loading db")
     exec_sql_file('management.sql')
     print("Starting flask")

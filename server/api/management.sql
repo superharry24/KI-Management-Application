@@ -48,7 +48,8 @@ CREATE TABLE item_update_log (
     change_amount INT DEFAULT 0,
     delete BOOLEAN DEFAULT FALSE,
     edit BOOLEAN DEFAULT FALSE,
-    date TIMESTAMP NOT NULL
+    date TIMESTAMP NOT NULL,
+    created BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE tasks (
