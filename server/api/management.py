@@ -1,3 +1,6 @@
+from hashlib import sha256
+import hashlib
+
 from flask_restful import Resource
 
 from flask_restful import request
@@ -180,8 +183,40 @@ class EventsManageApi(Resource):
         x = 8
 
 class UsersApi(Resource):
-    def put(self):
-        x = 8
+    def get(self):
+        name = request.args.get("name")
+        password = request.args.get("password")
+
+        hashed_pass = hashlib.sha256(password.encode()).hexdigest()
+
+        sql = "SELECT id, password_hash, admin FROM users WHERE active = TRUE AND name = %s"
+        user = exec_get_one(sql, (name,))
+
+        if user and user[1] == hashed_pass:
+            return {"id": user[0], "admin": user[2]}
+
+        return None
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str)
+        parser.add_argument('password', type=str)
+        parser.add_argument('admin', type=bool)
+        args = parser.parse_args()
+
+        hashed_pass = hashlib.sha256(args['password'].encode()).hexdigest()
+
+        sql = "SELECT id FROM users WHERE name = %s"
+        user = exec_get_one(sql, (args['name'],))
+
+        if user:
+            return {"status": "user already exists"}, 202
+
+        sql = """INSERT INTO users(name, password_hash, admin)	
+            VALUES (%s, %s, %s)"""
+        exec_commit(sql, (args['name'], hashed_pass, args['admin']))
+
+        return {"status": "created"}, 201
 
 
         

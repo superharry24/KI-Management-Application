@@ -1,12 +1,12 @@
 import React from 'react';
-import SortListModal from "./SortListModal";
-import AddItemModal from "./AddItemModal";
-import IncreaseItemModal from "./IncreaseItemModal";
-import DecreaseItemModal from "./DecreaseItemModal";
-import EditItemModal from "./EditItemModal";
-import DeleteItemModal from "./DeleteItemModal";
-import UpdateLog from "./UpdateLog";
-import ExportListModal from "./ExportListModal";
+import SortListModal from "../modals/Inventory-modals/SortListModal";
+import AddItemModal from "../modals/Inventory-modals/AddItemModal";
+import IncreaseItemModal from "../modals/Inventory-modals/IncreaseItemModal";
+import DecreaseItemModal from "../modals/Inventory-modals/DecreaseItemModal";
+import EditItemModal from "../modals/Inventory-modals/EditItemModal";
+import DeleteItemModal from "../modals/Inventory-modals/DeleteItemModal";
+import UpdateLog from "../modals/Inventory-modals/UpdateLog";
+import ExportListModal from "../modals/Inventory-modals/ExportListModal";
 import { jsPDF } from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
 import * as XLSX from "xlsx";
@@ -15,13 +15,15 @@ class Inventory extends React.Component {
 
     constructor(props) {
         super(props);
+        const user = JSON.parse(localStorage.getItem("user"));
 
         this.state = {
             list: [],
             selectedItem: null,
             selectedIndex: null,
             hoveredIndex: null,
-            userID: 1,
+            userID: user?.id || 0,
+            admin: user?.admin || false,
 
             // SORT STATE
             sortText: "",
@@ -265,7 +267,6 @@ class Inventory extends React.Component {
 
             doc.save(`inventory_${Date.now()}.pdf`);
         }
-        // name, sku, on hand, supplier
         else if(format === "Excel")
         {
             const list = this.state.list || [];
