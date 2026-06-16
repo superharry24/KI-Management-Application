@@ -14,6 +14,7 @@ export default function Navbar() {
       <NavItem to="/inventory" label="Inventory" />
       <NavItem to="/tasks" label="Tasks" />
       <NavItem to="/events" label="Events" />
+      <UserInfo/>
     </nav>
   );
 }
@@ -43,4 +44,34 @@ function NavItem({ to, label }) {
       {label}
     </Link>
   );
+}
+
+
+function UserInfo() {
+    console.log("UserInfo rendering");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const admin = user?.admin || false;
+    const username = user?.username || "";
+
+    return (
+        <div
+            style={{
+            flex: 1,
+            textAlign: "center",
+            padding: "14px 0",
+        }}
+    >
+        <div>{username}</div>
+        {admin && (
+            <div
+            style={{
+                fontSize: "0.8rem",
+                color: "#666",
+            }}
+            >
+            Admin
+            </div>
+        )}
+        </div>
+    );
 }

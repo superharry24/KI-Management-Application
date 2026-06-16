@@ -11,6 +11,7 @@ import { jsPDF } from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import {Navigate } from "react-router-dom";
 class Inventory extends React.Component {
 
     constructor(props) {
@@ -508,7 +509,9 @@ class Inventory extends React.Component {
 }
 
     render() {
-        
+        if (this.state.userID === 0) {
+            return <Navigate to="/login" replace />;
+        }        
 
         return (
             <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
@@ -611,12 +614,12 @@ class Inventory extends React.Component {
                     </div>
                     <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
                                 <button
-                                disabled={!this.state.selectedItem}
+                                disabled={!this.state.selectedItem || !this.state.admin}
                                 style={{
                                     flex: 1,
                                     padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
-                                    backgroundColor: this.state.selectedItem ? "#4caf50" : "#ccc",
+                                    backgroundColor: (this.state.selectedItem && this.state.admin) ? "#4caf50" : "#ccc",
                                     color: "white",
                                     border: "none",
                                     borderRadius: "4px"
@@ -627,12 +630,12 @@ class Inventory extends React.Component {
                             </button>
 
                             <button
-                                disabled={!this.state.selectedItem}
+                                disabled={!this.state.selectedItem || !this.state.admin}
                                 style={{
                                     flex: 1,
                                     padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
-                                    backgroundColor: this.state.selectedItem ? "#f6ff00" : "#ccc",
+                                    backgroundColor: (this.state.selectedItem && this.state.admin) ? "#f6ff00" : "#ccc",
                                     color: "white",
                                     border: "none",
                                     borderRadius: "4px"
@@ -643,12 +646,12 @@ class Inventory extends React.Component {
                             </button>
 
                             <button
-                                disabled={!this.state.selectedItem}
+                                disabled={!this.state.selectedItem || !this.state.admin}
                                 style={{
                                     flex: 1,
                                     padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
-                                    backgroundColor: this.state.selectedItem ? "#2196f3" : "#ccc",
+                                    backgroundColor: (this.state.selectedItem && this.state.admin) ? "#2196f3" : "#ccc",
                                     color: "white",
                                     border: "none",
                                     borderRadius: "4px"
@@ -662,12 +665,12 @@ class Inventory extends React.Component {
                     </div>
                     <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
                         <button
-                                disabled={!this.state.selectedItem}
+                                disabled={!this.state.selectedItem || !this.state.admin}
                                 style={{
                                     flex: 1,
                                     padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
-                                    backgroundColor: this.state.selectedItem ? "#f32121" : "#ccc",
+                                    backgroundColor: (this.state.selectedItem && this.state.admin) ? "#f32121" : "#ccc",
                                     color: "white",
                                     border: "none",
                                     borderRadius: "4px"
@@ -682,10 +685,11 @@ class Inventory extends React.Component {
                     <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
     
                     <button
+                        disabled={!this.state.admin}
                         style={{
                             flex: 1,
                             padding: "6px",
-                            backgroundColor: "#673ab7",
+                            backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
                             color: "white",
                             border: "none",
                             borderRadius: "4px",

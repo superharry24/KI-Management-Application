@@ -6,9 +6,9 @@ class Login extends React.Component {
         super(props);
 
         this.state = {
-        name: "",
-        password: "",
-        error: ""
+            name: "",
+            password: "",
+            error: ""
         };
     }
 
@@ -35,7 +35,8 @@ class Login extends React.Component {
                 JSON.stringify({
                     id: data.id,
                     username: this.state.name,
-                    admin: data.admin
+                    admin: data.admin,
+                    all: false
                 })
             );
             this.props.navigate("/");

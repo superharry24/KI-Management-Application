@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 class Signup extends React.Component {
   constructor(props) {
     super(props);
+    const user = JSON.parse(localStorage.getItem("user"));
 
     this.state = {
       name: "",
       password: "",
       admin: false,
-      error: ""
+      error: "",
+      curAdmin: user?.admin || true
     };
   }
 
@@ -23,6 +25,20 @@ class Signup extends React.Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    if (this.state.name.includes("\n") || this.state.name.includes("\t")){
+        this.setState({
+            error: "Username cannot include tabs or newlines"
+        });
+        return;
+    }
+
+    if (this.state.name.endsWith(" ") || this.state.name.startsWith(" ")){
+        this.setState({
+            error: "Username cannot start or end with a space"
+        });
+        return;
+    }
+    
 
     const userData = {
       name: this.state.name,
@@ -49,7 +65,7 @@ class Signup extends React.Component {
       const result = await response.json();
       console.log("User added:", result);
 
-      this.props.navigate("/login");
+      this.props.navigate("/");
 
     } catch (error) {
       console.log("Add user error:", error);
@@ -60,9 +76,20 @@ class Signup extends React.Component {
   };
 
   render() {
-    return (
+    //Boot user back to log in if not loged in after testing. Currently left blank to make first account after server reset
+
+    if (!this.state.curAdmin) {
+        return (
+        <div style={{ color: "red", padding: "20px" }}>
+            Error: You must be an administrator to access this page.
+        </div>
+        );
+    }
+
+
+    return (        
       <div style={{ maxWidth: "300px", margin: "0 auto" }}>
-        <h2>User Sign Up</h2>
+        <h2>New User Sign Up</h2>
 
         <form
           onSubmit={this.handleSubmit}

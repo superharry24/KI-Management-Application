@@ -186,6 +186,12 @@ class UsersApi(Resource):
     def get(self):
         name = request.args.get("name")
         password = request.args.get("password")
+        all = request.args.get("all")
+        if all:
+            users = exec_get_all("SELECT * FROM users WHERE active = TRUE")
+            return users
+            
+
 
         hashed_pass = hashlib.sha256(password.encode()).hexdigest()
 
@@ -210,7 +216,7 @@ class UsersApi(Resource):
         user = exec_get_one(sql, (args['name'],))
 
         if user:
-            return {"status": "user already exists"}, 202
+            return {"status": "user already exists"}, 418
 
         sql = """INSERT INTO users(name, password_hash, admin)	
             VALUES (%s, %s, %s)"""

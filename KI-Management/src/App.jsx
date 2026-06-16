@@ -18,11 +18,12 @@ export default function App() {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
 
         {/* Pages WITHOUT navbar */}
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        
 
       </Routes>
     </BrowserRouter>

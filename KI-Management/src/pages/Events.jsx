@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 class Events extends React.Component {
     constructor(props) {
@@ -14,6 +14,9 @@ class Events extends React.Component {
     }
 
     render() {
+        if (this.state.userID === 0) {
+            return <Navigate to="/login" replace />;
+        }
         return (
         <div>
             <p>placeholder</p>

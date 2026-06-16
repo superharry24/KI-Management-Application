@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 class Tasks extends React.Component {
 
@@ -10,12 +10,15 @@ class Tasks extends React.Component {
         this.state = {
 
             userID: user?.id || 0,
-            admin: user?.admin || false,
+            admin: user?.admin || false
         }
 
     
     }
     render() {
+        if (this.state.userID === 0) {
+            return <Navigate to="/login" replace />;
+        }
         return (
         <div>
             <p>placeholder</p>

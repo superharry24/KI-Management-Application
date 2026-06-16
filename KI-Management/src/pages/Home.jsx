@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+
 
 class Home extends React.Component {
 
@@ -21,8 +22,18 @@ class Home extends React.Component {
         this.props.navigate("/login");
     };
 
+    componentDidMount() {
+    if (this.state.userID === 0) {
+        this.props.navigate("/login");
+    }
+}
+
 
     render() {
+
+        if (this.state.userID === 0) {
+            return <Navigate to="/login" replace />;
+        }
         return (
         <div>
             <p>You are logged in as: {this.state.username}</p>
@@ -30,7 +41,29 @@ class Home extends React.Component {
             <button onClick={this.handleSignOut}>
             Sign Out
             </button>
+
+            {this.state.admin &&(
+            <button
+                        style={{
+                        flex: 1,
+                        padding: "6px",
+                        backgroundColor: "#252525",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px"
+                    }}
+                    onClick={() => this.props.navigate("/signup")}
+                >
+                                
+                Add New User
+            </button>
+            )}
         </div>
+
+        
+
+
+
         );
     }
     }
