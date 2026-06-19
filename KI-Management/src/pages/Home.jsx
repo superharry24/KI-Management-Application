@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import ViewUsersModal from "../modals/Home-Modals/ViewUsersModal";
 
 
 class Home extends React.Component {
@@ -12,7 +13,8 @@ class Home extends React.Component {
         this.state = {
             userID: user?.id || 0,
             admin: user?.admin || false,
-            username: user?.username || ""
+            username: user?.username || "",
+            userModalOpen: false
         }
 
     }
@@ -56,8 +58,34 @@ class Home extends React.Component {
                 >
                                 
                 Add New User
+            
             </button>
             )}
+            {this.state.admin &&(
+            <button
+                        style={{
+                        flex: 1,
+                        padding: "6px",
+                        backgroundColor: "#656464",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px"
+                    }}
+                    onClick={() => this.setState({userModalOpen: true})}
+                >
+                                
+                View Users
+            </button>
+            )}
+
+            <ViewUsersModal
+                    isOpen={this.state.userModalOpen}
+                    onClose={() =>
+                        this.setState({
+                            userModalOpen: false
+                        })
+                    }
+                />
         </div>
 
         

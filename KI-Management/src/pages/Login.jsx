@@ -23,7 +23,7 @@ class Login extends React.Component {
 
         try {
         const response = await fetch(
-            `http://localhost:5000/user?name=${this.state.name}&password=${this.state.password}`
+            `http://localhost:5000/user?name=${encodeURIComponent(this.state.name)}&password=${encodeURIComponent(this.state.password)}`
         );
 
         const data = await response.json();

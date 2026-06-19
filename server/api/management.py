@@ -189,7 +189,16 @@ class UsersApi(Resource):
         all = request.args.get("all")
         if all:
             users = exec_get_all("SELECT * FROM users WHERE active = TRUE")
-            return users
+            result = []
+            for user in users:
+                result.append([
+                    user[0],  # id
+                    user[1],  # name
+                    user[4],  # admin
+                    user[5].isoformat() if user[5] else None
+                ])
+
+            return result
             
 
 
@@ -199,6 +208,12 @@ class UsersApi(Resource):
         user = exec_get_one(sql, (name,))
 
         if user and user[1] == hashed_pass:
+            sql = """
+                UPDATE users
+                SET last_login = CURRENT_TIMESTAMP
+                WHERE name = %s
+                """
+            exec_commit(sql,(name,))
             return {"id": user[0], "admin": user[2]}
 
         return None

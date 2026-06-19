@@ -21,7 +21,8 @@ CREATE TABLE users(
     name VARCHAR(30) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     password_hash TEXT NOT NULL,
-    admin BOOLEAN NOT NULL
+    admin BOOLEAN NOT NULL,
+    last_login TIMESTAMP
 );
 
 
