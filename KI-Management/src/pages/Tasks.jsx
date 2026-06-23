@@ -1,32 +1,170 @@
 import React from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import NewTaskModal from "../modals/Task-Modals/NewTaskModal";
+import TaskInfoModal from "../modals/Task-Modals/TaskInfoModal";
 
 class Tasks extends React.Component {
 
     constructor(props) {
         super(props);
         const user = JSON.parse(localStorage.getItem("user"));
-
+        
         this.state = {
 
             userID: user?.id || 0,
-            admin: user?.admin || false
+            admin: user?.admin || false,
+            tasks: [],
+            staff_assign: [],
+            item_assign: [],
+            selected_task: null,
+            OpenModal: "none"
         }
 
     
     }
+
+    componentDidMount() {
+        this.fetchData();
+    }
+
+
+    fetchData = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/tasks");
+            const data = await response.json();
+
+            this.setState({
+                tasks: data.tasks || [],
+                staff_assign: data.staff_assign || [],
+                item_assign: data.item_assign || []
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+    
+
     render() {
         if (this.state.userID === 0) {
             return <Navigate to="/login" replace />;
         }
-        return (
-        <div>
-            <p>placeholder</p>
 
-        </div>
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    height: "100vh"
+                }}
+            >
+                {/* Left Task List */}
+                <div
+                    style={{
+                        width: "33%",
+                        borderRight: "1px solid #ddd",
+                        overflowY: "auto",
+                        padding: "15px",
+                        boxSizing: "border-box"
+                    }}
+                >
+                    {this.state.tasks.map((task) => (
+                        <div
+                            key={task[0]}
+                                onClick={() =>
+                                    this.setState((prevState) => ({
+                                        selected_task:
+                                            prevState.selected_task?.[0] === task?.[0]
+                                                ? null
+                                                : task,
+                                        OpenModal:
+                                            prevState.selected_task?.[0] === task?.[0]
+                                                ? "none"
+                                                : "info"
+                                    }))
+                                }
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "12px 18px",
+                                marginBottom: "12px",
+                                borderRadius: "15px",
+                                backgroundColor: this.state.selected_task?.[0] === task[0] ? "#e8ddff" : "#f5f5f5",
+                                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                                cursor: "pointer"
+                            }}
+                        >
+                            <span
+                                style={{
+                                    fontWeight: "600"
+                                }}
+                            >
+                                {task[1]}
+                            </span>
+
+                            <span
+                                style={{
+                                    color: "#666"
+                                }}
+                            >
+                                {["Unassigned", "Assigned", "In Progress", "Complete"][task[12]]}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Right Side Content */}
+                <div
+                    style={{
+                        flex: 1,
+                        padding: "20px"
+                    }}
+                    >{this.state.selected_task === null && this.state.OpenModal === "none" &&(
+                    <div>
+                        <h2>Task Details</h2>
+                    
+                        <p>Select a task from the list.</p>
+                        {this.state.admin &&(
+                            <button
+                                disabled={!this.state.admin}
+                                style={{
+                                    flex: 1,
+                                    padding: "6px",
+                                    backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer"
+                                }}
+                                onClick={() => this.setState({ OpenModal: "add" })}
+                            >
+                                Add new Task
+                            </button>
+                        )}</div>
+                    )}
+
+                    <NewTaskModal
+                        isOpen={this.state.OpenModal === "add"}
+                        onClose={() => {
+                            this.setState({ OpenModal: "none" });
+                            this.fetchData();
+                        }}
+                    />
+                    <TaskInfoModal
+                        isOpen={this.state.OpenModal === "info"}
+                        task={this.state.selected_task}
+                        onClose={() => {
+                            this.setState({ OpenModal: "none" });
+                        }}
+                    />
+                    
+                </div>
+            </div>
         );
     }
-    }
+}
 
 
     export default Tasks;

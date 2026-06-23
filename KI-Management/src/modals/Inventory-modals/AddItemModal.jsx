@@ -47,10 +47,16 @@ class AddItemModal extends React.Component {
   
     handleSubmit = () => {
             const {itemName, category, currentAmount, orderLevel, unitSize, unitCost, location, supplier, sku, description} = this.state;
-            if(itemName == '' || category == '' || currentAmount < 0 || orderLevel < 0 || unitSize == '' || unitCost < 0 || location == '' || supplier == '' || sku == '' || description == '')
+            if(itemName == '' || category == '' ||  unitSize == '' || location == '' || supplier == '' || sku == '' || description == '')
             {
                 this.setState({
                     error: "Empty Field Detected"
+                });
+            }
+            else if(currentAmount < 0 || orderLevel < 0 ||  unitCost < 0 )
+            {
+                this.setState({
+                    error: "Cannot Have Negative Starting Value in Any Field"
                 });
             }
             else

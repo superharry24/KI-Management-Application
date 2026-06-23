@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -76,8 +76,10 @@ class Signup extends React.Component {
   };
 
   render() {
-    //Boot user back to log in if not loged in after testing. Currently left blank to make first account after server reset
-
+    //Boot user back to log in if not loged in after testing. Remove to create first admin after launch, then add back in
+    if (this.state.userID === 0) {
+                return <Navigate to="/login" replace />;
+            }
     if (!this.state.curAdmin) {
         return (
         <div style={{ color: "red", padding: "20px" }}>
