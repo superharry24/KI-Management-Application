@@ -236,6 +236,7 @@ class TasksManageApi(Resource):
         parser.add_argument('priority', type=int)
         parser.add_argument('repeat_interval', type=int)
         parser.add_argument('interval_amount', type=int)
+        parser.add_argument('first_repeat_date', type=str)
         parser.add_argument('description', type=str)
         parser.add_argument('location', type=str)
         #figure out image later, CURRENT_TIMESTAMP used for times
@@ -248,7 +249,7 @@ class TasksManageApi(Resource):
                 WHERE id = %s"""
             elif(args['status'] == 1):                
                 sql = """UPDATE tasks
-                SETstatus = 1
+                SET status = 1
                 WHERE id = %s"""
             elif(args['status'] == 2):
                 sql = """UPDATE tasks
@@ -261,9 +262,23 @@ class TasksManageApi(Resource):
                 WHERE id = %s"""
             exec_commit(sql, (args['task_id'],))
             return {"status": "status updated"}, 201
+        elif(args['type'] == 2):
+            sql = """UPDATE tasks
+            SET name = %s,
+            category = %s,
+            priority = %s,
+            repeat_interval = %s,
+            interval_amount = %s,
+            repeat_threshold = %s,
+            description = %s,
+            location = %s,
+            image_path = %s
+            WHERE id = %s"""
+            exec_commit(sql, (args['name'], args['category'], args['priority'], args['repeat_interval'],
+                              args['interval_amount'], args['first_repeat_date'], args['description'], args['location'], None, args['task_id'], ))
+            return {"status": "task edited"}, 201
+        
 
-        else:
-            x=8
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('taskName', type=str)
@@ -271,16 +286,17 @@ class TasksManageApi(Resource):
         parser.add_argument('priority', type=int)
         parser.add_argument('repeat_interval', type=int)
         parser.add_argument('interval_amount', type=int)
+        parser.add_argument('first_repeat_date', type=str)
         parser.add_argument('description', type=str)
         parser.add_argument('location', type=str)
         #parser.add_argument('image', type=str)
         args = parser.parse_args()
         sql = """
-            INSERT INTO tasks(name, category, priority, repeat_interval, interval_amount, description, location, created_date, status)	
-            VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, 0)
+            INSERT INTO tasks(name, category, priority, repeat_interval, interval_amount, repeat_threshold, description, location, created_date, status)	
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, 0)
             RETURNING id
             """
-        exec_commit(sql, (args['taskName'], args['category'], args['priority'], args['repeat_interval'], args['interval_amount'], args['description'], args['location']))
+        exec_commit(sql, (args['taskName'], args['category'], args['priority'], args['repeat_interval'], args['interval_amount'], args['first_repeat_date'], args['description'], args['location']))
         return {"status": "created"}, 201
         
 

@@ -1,11 +1,12 @@
 import React from "react";
 import "./CalendarFixer.css";
 
-class NewTaskModal extends React.Component {
+class EditTaskModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            id: 0,
             taskName: "",
             category: "",
             priority: 0,
@@ -23,17 +24,18 @@ class NewTaskModal extends React.Component {
         this.setState({ image: e.target.files[0] });
     };
     componentDidUpdate(prevProps) {
-        if (!prevProps.isOpen && this.props.isOpen) {
+        if (!prevProps.isOpen && this.props.isOpen && this.props.task) {
             this.setState({
-                taskName: "",
-                category: "",
-                priority: 0,
-                repeat_interval: 0,
-                interval_amount: 0,
-                first_repeat_date: null,
-                description: "",
-                location: "",
-                image: null,
+                id: this.props.task[0],
+                taskName: this.props.task[1],
+                category: this.props.task[2],
+                priority: this.props.task[3],
+                repeat_interval: this.props.task[4],
+                interval_amount: this.props.task[5],
+                first_repeat_date: this.props.task[8],
+                description: this.props.task[9],
+                location: this.props.task[10],
+                image: this.props.task[11],
                 error: ""
             });
         }
@@ -52,11 +54,12 @@ class NewTaskModal extends React.Component {
         });
     };
 
-    addTask = async (taskData) => {
+    editTask = async (taskData) => {
+        
 
         try {
             const response = await fetch("http://localhost:5000/tasks", {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -64,14 +67,14 @@ class NewTaskModal extends React.Component {
             });
 
             if (!response.ok) {
-                throw new Error("Failed to create task");
+                throw new Error("Failed to edit task");
             }
 
             const result = await response.json();
-            console.log("task created:", result);
+            console.log("task edit:", result);
 
         } catch (error) {
-            console.log("Add task error:", error);
+            console.log("Edit task error:", error);
             throw error;
         }
     };
@@ -80,8 +83,8 @@ class NewTaskModal extends React.Component {
 
   
     handleSubmit = async() => {
-            const {taskName, category, priority, repeat_interval, interval_amount, first_repeat_date, description, location} = this.state;
-            if(taskName == '' || category == '' ||(repeat_interval > 0 && (interval_amount == 0 || first_repeat_date == '')) || description == '' || location == '')
+            const {id, taskName, category, priority, repeat_interval, interval_amount, first_repeat_date, description, location} = this.state;
+            if(taskName == '' || category == '' ||(repeat_interval > 0 && interval_amount == 0) || description == '' || location == '')
             {
                 this.setState({
                     error: "Empty Field Detected"
@@ -101,12 +104,12 @@ class NewTaskModal extends React.Component {
             }
             else
             {
-                const data = {taskName, category, priority, repeat_interval, interval_amount, first_repeat_date, description, location};
+                const data = {task_id: id, name: taskName, category, priority, repeat_interval, interval_amount, first_repeat_date, description, location, type: 2};
                 try {
-                    await this.addTask(data);
+                    await this.editTask(data);
                     this.props.onClose();
                 } catch (e) {
-                    this.setState({ error: "Failed to create task" });
+                    this.setState({ error: "Failed to edit task" });
                 }
             }
             
@@ -118,20 +121,20 @@ class NewTaskModal extends React.Component {
         return (
             <div style={styles.backdrop}>
                 <div style={styles.modal}>
-                    <h3 style={{ marginTop: 0 }}>Add New Task</h3>
+                    <h3 style={{ marginTop: 0 }}>Edit Task</h3>
 
                     <div style={styles.form}>
                         <div style={styles.field}>
                             <label style = {styles.label}>Task Name:</label>
-                            <input name="taskName" placeholder="Task Name" onChange={this.handleChange} style={inputStyle} />
+                            <input name="taskName" placeholder="Task Name" value={this.state.taskName} onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>
                             <label style = {styles.label}>Category:</label>
-                            <input name="category" placeholder="Category" onChange={this.handleChange} style={inputStyle} />
+                            <input name="category" placeholder="Category" value={this.state.category} onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>
                             <label style = {styles.label}>Priority (1 is highest):</label>
-                            <input type="number" name="priority" placeholder="0" onChange={this.handleChange} style={inputStyle} />
+                            <input type="number" name="priority" placeholder="0" value={this.state.priority} onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>
                             <label style = {styles.label}>Repeat Interval:</label>
@@ -160,10 +163,10 @@ class NewTaskModal extends React.Component {
                         <div>
                             <div style={styles.field}>
                                 <label style = {styles.label}>Length of Interval:</label>
-                                <input type="number" name="interval_amount" placeholder="0" onChange={this.handleChange} style={inputStyle} />
+                                <input type="number" name="interval_amount" placeholder="0" value={this.state.interval_amount} onChange={this.handleChange} style={inputStyle} />
                             </div>
                             <div style={styles.field}>
-                                <label style={styles.label}>First Repeat Date:</label>
+                                <label style={styles.label}>Next Repeat Date:</label>
                                 <input
                                     type="date"
                                     name="first_repeat_date"
@@ -179,11 +182,11 @@ class NewTaskModal extends React.Component {
                         </div>)}
                         <div style={styles.field}>
                             <label style = {styles.label}>Description:</label>
-                            <input name="description" placeholder="Description" onChange={this.handleChange} style={inputStyle} />
+                            <input name="description" placeholder="Description" value={this.state.description} onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>
                             <label style = {styles.label}>Location:</label>
-                            <input name="location" placeholder="Location" onChange={this.handleChange} style={inputStyle} />
+                            <input name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange} style={inputStyle} />
                         </div>
                         {/* <div style={styles.field}>
                             <label style={styles.label}>Task Image:</label>
@@ -275,7 +278,6 @@ const styles = {
         textAlign: "left",
         marginBottom: "2px"
     }
-    
 
 
 };
@@ -288,5 +290,4 @@ const inputStyle = {
     color: "#333"
 };
 
-
-export default NewTaskModal;
+export default EditTaskModal;

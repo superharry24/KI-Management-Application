@@ -10,7 +10,8 @@ class TaskInfoModal extends React.Component {
             interval_type: "",
             status_type: "",
             create_date: "",
-            complete_date: ""
+            complete_date: "",
+            repeat_date: ""
             
         };
     }
@@ -61,6 +62,7 @@ class TaskInfoModal extends React.Component {
             }
 
             const creDate = new Date(this.props.task[6])
+            const reDate = new Date(this.props.task[8])
             const comDate = this.props.task[7]
                 ? new Date(this.props.task[7])
                 : "none"
@@ -70,13 +72,15 @@ class TaskInfoModal extends React.Component {
                 complete = comDate.toLocaleDateString("en-US")
             }
 
+
             this.setState({
                 selectedTask: this.props.task,
                 button_pushed: "",
                 interval_type: interval_message,
                 status_type: stat_message,
                 create_date: creDate.toLocaleDateString("en-US"),
-                complete_date: complete
+                complete_date: complete,
+                repeat_date: reDate.toLocaleDateString("en-US"),
             });
             
         }
@@ -110,7 +114,7 @@ class TaskInfoModal extends React.Component {
                                 <p><b>Category:</b> {this.state.selectedTask[2]}</p>
                                 <p><b>Priority:</b> {this.state.selectedTask[3]}</p>
                                 {this.state.interval_type != "none" && <div><p><b>Repeats every:</b> {this.state.selectedTask[5]} <b> </b> {this.state.interval_type}</p>
-                                <p><b>Resets on : </b> {this.state.selectedTask[8]} </p> </div>}
+                                <p><b>Resets on : </b> {this.state.repeat_date} </p> </div>}
                                 {this.state.interval_type === "none" && <p><b>Single Time Task</b></p>}
                                 <p><b>Created On:</b> {this.state.create_date}</p>
                                 <p><b>Location:</b> {this.state.selectedTask[10]}</p>

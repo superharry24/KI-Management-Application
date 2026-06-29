@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import NewTaskModal from "../modals/Task-Modals/NewTaskModal";
 import TaskInfoModal from "../modals/Task-Modals/TaskInfoModal";
+import EditTaskModal from "../modals/Task-Modals/EditTaskModal";
 
 class Tasks extends React.Component {
 
@@ -38,6 +39,7 @@ class Tasks extends React.Component {
                 staff_assign: data.staff_assign || [],
                 item_assign: data.item_assign || []
             });
+            
 
         } catch (error) {
             console.log(error);
@@ -72,18 +74,23 @@ class Tasks extends React.Component {
                     {this.state.tasks.map((task) => (
                         <div
                             key={task[0]}
-                                onClick={() =>
-                                    this.setState((prevState) => ({
-                                        selected_task:
-                                            prevState.selected_task?.[0] === task?.[0]
-                                                ? null
-                                                : task,
-                                        OpenModal:
-                                            prevState.selected_task?.[0] === task?.[0]
-                                                ? "none"
-                                                : "info"
-                                    }))
-                                }
+                                onClick={() => {
+                                    const isSameTask = this.state.selected_task?.[0] === task?.[0];
+
+                                    if (isSameTask) {
+                                        this.setState({
+                                            selected_task: null,
+                                            OpenModal: "none"
+                                        });
+                                    } else {
+                                        this.setState({
+                                            selected_task: task,
+                                            OpenModal: "none"
+                                        }, () => {//Updates data for new info panel
+                                            this.setState({ OpenModal: "info" });
+                                        });
+                                    }
+                                }}
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between",
@@ -159,6 +166,85 @@ class Tasks extends React.Component {
                             this.setState({ OpenModal: "none" });
                         }}
                     />
+                    <EditTaskModal
+                        isOpen={this.state.OpenModal === "edit"}
+                        task={this.state.selected_task}
+                        onClose={() => {
+                            this.fetchData().then(() => {
+                                // fix current task
+                                this.setState((prevState) => {
+                                    const updatedTask = prevState.tasks.find(
+                                        t => t[0] === prevState.selected_task?.[0]
+                                    );
+
+                                    return {
+                                        selected_task: updatedTask || null,
+                                        OpenModal: "info"
+                                    };
+                                });
+                            });
+                        }}
+                    />
+
+
+
+                    {this.state.selected_task != null && this.state.OpenModal === "info" &&(
+                        <div>
+                            {this.state.admin &&(
+                                <div>
+                                    <button
+                                        style={{
+                                            flex: 1,
+                                            padding: "6px",
+                                            cursor:"pointer",
+                                            backgroundColor:"#00ff1a",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px"
+                                        }}
+                                        onClick={() => this.setState({ OpenModal: "edit" })}
+                                    >
+                                        Edit Task Info
+                                    </button>
+                                    <button
+                                        style={{
+                                            flex: 1,
+                                            padding: "6px",
+                                            cursor:"pointer",
+                                            backgroundColor:"#ffc400",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px"
+                                        }}
+                                        onClick={() => this.setState({ OpenModal: "assign" })}
+                                    >
+                                        Assign Staff
+                                    </button>
+                                </div>                            
+                            )}
+                            {this.state.staff_assign[this.state.selected_task[0],this.state.userID] &&(
+                                <button
+                                        style={{
+                                            flex: 1,
+                                            padding: "6px",
+                                            cursor: "pointer",
+                                            backgroundColor:"#ffc400",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px"
+                                        }}
+                                        onClick={() => this.setState({ OpenModal: "status" })}
+                                    >
+                                        Change Status
+                                </button>
+                            )}
+
+
+
+
+
+                        </div>
+                    )}
                     
                 </div>
             </div>
