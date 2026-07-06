@@ -74,7 +74,24 @@ class Tasks extends React.Component {
                         padding: "15px",
                         boxSizing: "border-box"
                     }}
+                    
                 >
+                    <button
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            marginBottom: "12px",
+                            cursor: "pointer",
+                            backgroundColor: "#8c8c8c",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            boxSizing: "border-box"
+                        }}
+                        onClick={() => this.setState({ OpenModal: "sort" })}
+                    >
+                        Sort Tasks
+                    </button>
                     {this.state.tasks.map((task) => (
                         <div
                             key={task[0]}
@@ -115,13 +132,39 @@ class Tasks extends React.Component {
                                 {task[1]}
                             </span>
 
-                            <span
+                            <div
                                 style={{
-                                    color: "#666"
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "8px"
                                 }}
                             >
-                                {["Unassigned", "Assigned", "In Progress", "Complete"][task[12]]}
-                            </span>
+                                <span
+                                    style={{
+                                        color: "#666"
+                                    }}
+                                >
+                                    {["Unassigned", "Assigned", "In Progress", "Complete"][task[12]]}
+                                </span>
+
+                                <div
+                                    style={{
+                                        width: "10px",
+                                        height: "10px",
+                                        borderRadius: "50%",
+                                        backgroundColor: this.state.staff_assign.some(
+                                            assignment =>
+                                                assignment[0] === task[0] &&
+                                                assignment[1] === this.state.userID
+                                        )
+                                            ? "#22c55e" // green when assigned
+                                            : "#ffffff", // white otherwise
+                                        border: "1px solid #bbb"
+                                    }}
+                                />
+                            </div>
+                                
+                            
                         </div>
                     ))}
                 </div>
@@ -258,7 +301,36 @@ class Tasks extends React.Component {
                                     >
                                         Assign Staff
                                     </button>
-                                </div>                            
+                                    <button
+                                        style={{
+                                            flex: 1,
+                                            padding: "6px",
+                                            cursor:"pointer",
+                                            backgroundColor:"#866700",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px"
+                                        }}
+                                        onClick={() => this.setState({ OpenModal: "unassign" })}
+                                    >
+                                        Unassign Staff
+                                    </button>
+                                    <button
+                                        style={{
+                                            flex: 1,
+                                            padding: "6px",
+                                            cursor:"pointer",
+                                            backgroundColor:"#eeff00",
+                                            color: "white",
+                                            border: "none",
+                                            borderRadius: "4px"
+                                        }}
+                                        onClick={() => this.setState({ OpenModal: "view" })}
+                                    >
+                                        View Staff
+                                    </button>
+                                </div>  
+                                                    
                             )}
                             {this.state.staff_assign.some(
                                 assignment =>
