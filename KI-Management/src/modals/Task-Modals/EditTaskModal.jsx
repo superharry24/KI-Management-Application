@@ -1,5 +1,6 @@
 import React from "react";
 import "./CalendarFixer.css";
+import ConfirmPopup from "../ConfirmPopup";
 
 class EditTaskModal extends React.Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class EditTaskModal extends React.Component {
             description: "",
             location: "",
             image: null,
+            deleting: false,
             error: ""
         };
     }
@@ -36,6 +38,7 @@ class EditTaskModal extends React.Component {
                 description: this.props.task[9],
                 location: this.props.task[10],
                 image: this.props.task[11],
+                deleting: false,
                 error: ""
             });
         }
@@ -53,6 +56,33 @@ class EditTaskModal extends React.Component {
                     : value
         });
     };
+
+    deleteTask = async() => {
+        try {
+            const response = await fetch("http://localhost:5000/tasks", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    task_id: this.state.id,
+                    type: 3
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete task");
+            }
+
+            const result = await response.json();
+            console.log("task deleted:", result);
+
+        } catch (error) {
+            console.log("Delele task error:", error);
+            throw error;
+        }
+        
+    }
 
     editTask = async (taskData) => {
         
@@ -77,7 +107,11 @@ class EditTaskModal extends React.Component {
             console.log("Edit task error:", error);
             throw error;
         }
+
+        this.props.onClose();
     };
+
+
 
     
 
@@ -209,6 +243,10 @@ class EditTaskModal extends React.Component {
                         </div>
                     )}
                     <div style={styles.actions}>
+                        <button onClick={() => this.setState({ deleting: true })} style={styles.delete}>
+                            Delete
+                        </button>    
+
                         <button onClick={this.props.onClose} style={styles.cancel}>
                             Cancel
                         </button>
@@ -218,6 +256,16 @@ class EditTaskModal extends React.Component {
                         </button>                        
                     </div>
                 </div>
+                <ConfirmPopup
+                    isOpen={this.state.deleting}
+                    onClose={async () => {
+                                await this.deleteTask;
+                                this.props.onSubmit();
+                            }}
+                    header= "Delete Task?"
+                    message= "Are you sure you want to delete this task? (This action cannot be undone)"
+                    onSubmit={this.deleteTask}
+                />
             </div>
         );
     }
@@ -260,7 +308,16 @@ const styles = {
     },
     cancel: {
         flex: 1,
-        background: "#f44336",
+        background: "#000000",
+        color: "white",
+        border: "none",
+        padding: "6px",
+        borderRadius: "4px",
+        cursor: "pointer"
+    },
+    delete: {
+        flex: 1,
+        background: "#ff0000",
         color: "white",
         border: "none",
         padding: "6px",

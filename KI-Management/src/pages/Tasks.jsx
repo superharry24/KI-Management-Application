@@ -3,6 +3,8 @@ import { useNavigate, Navigate } from "react-router-dom";
 import NewTaskModal from "../modals/Task-Modals/NewTaskModal";
 import TaskInfoModal from "../modals/Task-Modals/TaskInfoModal";
 import EditTaskModal from "../modals/Task-Modals/EditTaskModal";
+import AssignStaffModal from "../modals/Task-Modals/AssignStaffModal";
+
 
 class Tasks extends React.Component {
 
@@ -23,6 +25,8 @@ class Tasks extends React.Component {
 
     
     }
+
+    
 
     componentDidMount() {
         this.fetchData();
@@ -184,6 +188,40 @@ class Tasks extends React.Component {
                                 });
                             });
                         }}
+                        onSubmit={() => {
+                            this.fetchData().then(() => {
+                                // fix current task
+                                this.setState((prevState) => {
+                                    const updatedTask = prevState.tasks.find(
+                                        t => t[0] === prevState.selected_task?.[0]
+                                    );
+
+                                    return {
+                                        selected_task: null,
+                                        OpenModal: "none"
+                                    };
+                                });
+                            });
+                        }}
+                    />
+                    <AssignStaffModal
+                        isOpen={this.state.OpenModal === "assign"}
+                        task={this.state.selected_task?.[0]}
+                        onClose={() => {
+                            this.fetchData().then(() => {
+                                // fix current task
+                                this.setState((prevState) => {
+                                    const updatedTask = prevState.tasks.find(
+                                        t => t[0] === prevState.selected_task?.[0]
+                                    );
+
+                                    return {
+                                        selected_task: updatedTask || null,
+                                        OpenModal: "info"
+                                    };
+                                });
+                            });
+                        }}
                     />
 
 
@@ -222,13 +260,17 @@ class Tasks extends React.Component {
                                     </button>
                                 </div>                            
                             )}
-                            {this.state.staff_assign[this.state.selected_task[0],this.state.userID] &&(
+                            {this.state.staff_assign.some(
+                                assignment =>
+                                    assignment[0] === this.state.selected_task[0] &&
+                                    assignment[1] === this.state.userID
+                            )  &&(
                                 <button
                                         style={{
                                             flex: 1,
                                             padding: "6px",
                                             cursor: "pointer",
-                                            backgroundColor:"#ffc400",
+                                            backgroundColor:"#1100ff",
                                             color: "white",
                                             border: "none",
                                             borderRadius: "4px"

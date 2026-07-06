@@ -189,8 +189,7 @@ class InventoryApi(Resource):
                 VALUES (%s, %s, %s, TRUE)
                 """
             exec_commit(sql,(args['item_id'], args['userID'], args['timestamp']))
-            if args['type'] == 1:
-                return {"status": "increased"}, 201
+            return {"status": "deleted"}, 201
         
 class UpdateLogApi(Resource):
     def get(self):
@@ -229,7 +228,7 @@ class TasksManageApi(Resource):
     def put(self):
         parser = reqparse.RequestParser()
         parser.add_argument('task_id', type=int)
-        parser.add_argument('type', type=int) #type 1 updates status, type 2 edits task info
+        parser.add_argument('type', type=int) #type 1 updates status, type 2 edits task info, 3 is delete
         parser.add_argument('status', type=int)
         parser.add_argument('name', type=str)
         parser.add_argument('category', type=str)
@@ -262,6 +261,7 @@ class TasksManageApi(Resource):
                 WHERE id = %s"""
             exec_commit(sql, (args['task_id'],))
             return {"status": "status updated"}, 201
+        
         elif(args['type'] == 2):
             sql = """UPDATE tasks
             SET name = %s,
@@ -277,6 +277,13 @@ class TasksManageApi(Resource):
             exec_commit(sql, (args['name'], args['category'], args['priority'], args['repeat_interval'],
                               args['interval_amount'], args['first_repeat_date'], args['description'], args['location'], None, args['task_id'], ))
             return {"status": "task edited"}, 201
+        
+        elif(args['type'] == 3):
+            sql = """UPDATE tasks
+            SET active = FALSE
+            WHERE id = %s"""
+            exec_commit(sql, (args['task_id'],))
+            return {"status": "task deleted"}, 201
         
 
     def post(self):
@@ -365,10 +372,21 @@ class UsersApi(Resource):
 
 
         
-class TasksApi(Resource):
-    def put(self):
-        x = 8
 
+
+class TasksApi(Resource):
+    def post(self):
+        data = request.get_json()
+        task_id = data.get("task_id")
+        users = data.get("users", [])
+
+
+        for user_id in users:
+            sql = """INSERT INTO task_assigned_staff(task_id, user_id)
+            VALUES (%s, %s)"""
+            exec_commit(sql, (task_id, user_id))
+
+        return {"assigned": True}, 200
 
 class RoomsApi(Resource):
     def put(self):
