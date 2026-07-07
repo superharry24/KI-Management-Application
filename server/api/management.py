@@ -374,7 +374,11 @@ class UsersApi(Resource):
         
 
 
-class TasksApi(Resource):
+class StaffAssignApi(Resource):
+    def get(self):
+        result = clean_data(exec_get_all("SELECT * FROM task_assigned_staff"))
+        return result, 200
+    
     def post(self):
         data = request.get_json()
         task_id = data.get("task_id")
@@ -387,6 +391,18 @@ class TasksApi(Resource):
             exec_commit(sql, (task_id, user_id))
 
         return {"assigned": True}, 200
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('task_id', type=int)
+        parser.add_argument('user_id', type=int)
+        args = parser.parse_args()
+
+        sql = """DELETE FROM task_assigned_staff
+            WHERE task_id = %s
+            AND user_id = %s"""
+        exec_commit(sql, (args['task_id'], args['user_id']))
+
 
 class RoomsApi(Resource):
     def put(self):

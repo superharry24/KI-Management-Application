@@ -1,5 +1,4 @@
 import React from "react";
-//Entry order in log get in management.py
 class AssignStaffModal extends React.Component {
     constructor(props) {
         super(props);
@@ -30,7 +29,8 @@ class AssignStaffModal extends React.Component {
             this.setState({    
                 userList: [],
                 selected_users: [],
-                task_id: this.props.task
+                task_id: this.props.task,
+                error: ""
             });
             this.fetchData()
         }

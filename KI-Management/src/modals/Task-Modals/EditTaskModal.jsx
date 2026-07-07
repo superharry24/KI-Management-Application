@@ -258,13 +258,13 @@ class EditTaskModal extends React.Component {
                 </div>
                 <ConfirmPopup
                     isOpen={this.state.deleting}
-                    onClose={async () => {
-                                await this.deleteTask;
+                    onSubmit={async () => {
+                                await this.deleteTask();
                                 this.props.onSubmit();
                             }}
                     header= "Delete Task?"
                     message= "Are you sure you want to delete this task? (This action cannot be undone)"
-                    onSubmit={this.deleteTask}
+                    onClose={() => this.setState({ deleting: false })}
                 />
             </div>
         );

@@ -4,6 +4,7 @@ import NewTaskModal from "../modals/Task-Modals/NewTaskModal";
 import TaskInfoModal from "../modals/Task-Modals/TaskInfoModal";
 import EditTaskModal from "../modals/Task-Modals/EditTaskModal";
 import AssignStaffModal from "../modals/Task-Modals/AssignStaffModal";
+import ViewAssignedStaff from "../modals/Task-Modals/ViewAssignedStaff";
 
 
 class Tasks extends React.Component {
@@ -266,6 +267,11 @@ class Tasks extends React.Component {
                             });
                         }}
                     />
+                    <ViewAssignedStaff
+                        isOpen={this.state.OpenModal === "view"}
+                        task={this.state.selected_task?.[0]}
+                        onClose={() => {this.setState({OpenModal: "info"})}}
+                    />
 
 
 
@@ -300,20 +306,6 @@ class Tasks extends React.Component {
                                         onClick={() => this.setState({ OpenModal: "assign" })}
                                     >
                                         Assign Staff
-                                    </button>
-                                    <button
-                                        style={{
-                                            flex: 1,
-                                            padding: "6px",
-                                            cursor:"pointer",
-                                            backgroundColor:"#866700",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "4px"
-                                        }}
-                                        onClick={() => this.setState({ OpenModal: "unassign" })}
-                                    >
-                                        Unassign Staff
                                     </button>
                                     <button
                                         style={{
