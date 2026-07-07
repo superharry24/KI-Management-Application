@@ -62,8 +62,15 @@ def reset_repeatable_tasks(): #finds all repeatable tasks, if they're past their
                 repeat_threshold = %s,
                 complete_data = NULL
                 WHERE id = %s
-            """, (new_time, task["id"]))
+            """, (new_time, task[0]))
 
+def get_status(task_id):
+    result =  exec_get_one("SELECT status FROM tasks WHERE id = %s", (task_id,))
+    return result[0] if result else None
+
+def assign_status(task_id, status):
+    exec_commit("UPDATE tasks SET status = %s WHERE id = %s",(status, task_id))
+    
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -241,25 +248,9 @@ class TasksManageApi(Resource):
         #figure out image later, CURRENT_TIMESTAMP used for times
         args = parser.parse_args()   
         if(args['type'] == 1):
-            sql = None
-            if(args['status'] == 0):
-                sql = """UPDATE tasks
-                SET status = 0
-                WHERE id = %s"""
-            elif(args['status'] == 1):                
-                sql = """UPDATE tasks
-                SET status = 1
-                WHERE id = %s"""
-            elif(args['status'] == 2):
-                sql = """UPDATE tasks
-                SET status = 2
-                WHERE id = %s"""
-            elif(args['status'] == 3):
-                sql = """UPDATE tasks
-                SET status = 3,
-                complete_date = CURRENT_TIMESTAMP
-                WHERE id = %s"""
-            exec_commit(sql, (args['task_id'],))
+            assign_status(args['task_id'], args['status'])
+            if(args['status'] == "3"):
+                exec_commit("SET complete_date = CURRENT_TIMESTAMP WHERE id = %s", (args['task_id'],))
             return {"status": "status updated"}, 201
         
         elif(args['type'] == 2):
@@ -389,6 +380,10 @@ class StaffAssignApi(Resource):
             sql = """INSERT INTO task_assigned_staff(task_id, user_id)
             VALUES (%s, %s)"""
             exec_commit(sql, (task_id, user_id))
+        #make assigned if previously unassigned
+        if(get_status(task_id) == 0):
+            assign_status(task_id, 1)
+            
 
         return {"assigned": True}, 200
     
@@ -396,12 +391,18 @@ class StaffAssignApi(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('task_id', type=int)
         parser.add_argument('user_id', type=int)
+        parser.add_argument('size', type=int)
         args = parser.parse_args()
 
         sql = """DELETE FROM task_assigned_staff
             WHERE task_id = %s
             AND user_id = %s"""
         exec_commit(sql, (args['task_id'], args['user_id']))
+        #set to unassigned if removed last assigned user
+        if(args['size'] == 1 and args['task_id'] != 3):
+            assign_status(args['task_id'], 0)
+
+        return {"deleted": True}, 200
 
 
 class RoomsApi(Resource):

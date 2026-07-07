@@ -65,7 +65,8 @@ class ViewAssignedStaff extends React.Component {
             },
             body: JSON.stringify({
                 user_id: this.state.selectedUser[0],
-                task_id: this.state.task_id
+                task_id: this.state.task_id,
+                size: this.state.assignedUserList.length
             })
         });
         await this.fetchData(this.state.task_id);

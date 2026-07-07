@@ -120,7 +120,7 @@ class TaskInfoModal extends React.Component {
                                 <p><b>Location:</b> {this.state.selectedTask[10]}</p>
                                 <p><b>Status:</b> {this.state.status_type}</p>
                                 <p><b>Description:</b> {this.state.selectedTask[9]}</p>
-                                {this.state.selectedTask[7] != null && <p><b>Completed On:</b> {this.state.complete_date}</p>}
+                                {this.state.selectedTask[12] == 3 && <p><b>Completed On:</b> {this.state.complete_date}</p>}
                             </div>
                         ) : (
                             <p>Task not found</p>

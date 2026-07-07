@@ -69,17 +69,6 @@ class AssignStaffModal extends React.Component {
                     task_id: this.state.task_id
                 })
             });
-            await fetch("http://localhost:5000/tasks", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    type: 1,
-                    status: 1,
-                    task_id: this.state.task_id
-                })
-            });
             this.props.onClose();
         }
     };

@@ -5,6 +5,7 @@ import TaskInfoModal from "../modals/Task-Modals/TaskInfoModal";
 import EditTaskModal from "../modals/Task-Modals/EditTaskModal";
 import AssignStaffModal from "../modals/Task-Modals/AssignStaffModal";
 import ViewAssignedStaff from "../modals/Task-Modals/ViewAssignedStaff";
+import ChangeStatusModal from "../modals/Task-Modals/ChangeStatusModal";
 
 
 class Tasks extends React.Component {
@@ -27,6 +28,17 @@ class Tasks extends React.Component {
     
     }
 
+    refreshSelectedTask = async () => {
+    await this.fetchData();
+
+    this.setState(prev => ({
+        selected_task:
+            prev.tasks.find(
+                t => t[0] === prev.selected_task?.[0]
+            ) || null,
+        OpenModal: "info"
+    }));
+};
     
 
     componentDidMount() {
@@ -184,15 +196,8 @@ class Tasks extends React.Component {
                         {this.state.admin &&(
                             <button
                                 disabled={!this.state.admin}
-                                style={{
-                                    flex: 1,
-                                    padding: "6px",
-                                    backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: "pointer"
-                                }}
+                                style={{flex: 1, padding: "6px", backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
+                                    color: "white", border: "none", borderRadius: "4px", cursor: "pointer"}}
                                 onClick={() => this.setState({ OpenModal: "add" })}
                             >
                                 Add new Task
@@ -217,21 +222,7 @@ class Tasks extends React.Component {
                     <EditTaskModal
                         isOpen={this.state.OpenModal === "edit"}
                         task={this.state.selected_task}
-                        onClose={() => {
-                            this.fetchData().then(() => {
-                                // fix current task
-                                this.setState((prevState) => {
-                                    const updatedTask = prevState.tasks.find(
-                                        t => t[0] === prevState.selected_task?.[0]
-                                    );
-
-                                    return {
-                                        selected_task: updatedTask || null,
-                                        OpenModal: "info"
-                                    };
-                                });
-                            });
-                        }}
+                        onClose={() => {this.refreshSelectedTask()}}
                         onSubmit={() => {
                             this.fetchData().then(() => {
                                 // fix current task
@@ -251,26 +242,17 @@ class Tasks extends React.Component {
                     <AssignStaffModal
                         isOpen={this.state.OpenModal === "assign"}
                         task={this.state.selected_task?.[0]}
-                        onClose={() => {
-                            this.fetchData().then(() => {
-                                // fix current task
-                                this.setState((prevState) => {
-                                    const updatedTask = prevState.tasks.find(
-                                        t => t[0] === prevState.selected_task?.[0]
-                                    );
-
-                                    return {
-                                        selected_task: updatedTask || null,
-                                        OpenModal: "info"
-                                    };
-                                });
-                            });
-                        }}
+                        onClose={() => {this.refreshSelectedTask()}}
                     />
                     <ViewAssignedStaff
                         isOpen={this.state.OpenModal === "view"}
                         task={this.state.selected_task?.[0]}
-                        onClose={() => {this.setState({OpenModal: "info"})}}
+                        onClose={() => {this.refreshSelectedTask()}}
+                    />
+                    <ChangeStatusModal
+                        isOpen={this.state.OpenModal === "status"}
+                        task={this.state.selected_task}
+                        onClose={() => {this.refreshSelectedTask()}}
                     />
 
 
@@ -280,43 +262,22 @@ class Tasks extends React.Component {
                             {this.state.admin &&(
                                 <div>
                                     <button
-                                        style={{
-                                            flex: 1,
-                                            padding: "6px",
-                                            cursor:"pointer",
-                                            backgroundColor:"#00ff1a",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "4px"
-                                        }}
+                                        style={{flex: 1, padding: "6px", cursor:"pointer", backgroundColor:"#00ff1a",
+                                            color: "white", border: "none", borderRadius: "4px"}}
                                         onClick={() => this.setState({ OpenModal: "edit" })}
                                     >
                                         Edit Task Info
                                     </button>
                                     <button
-                                        style={{
-                                            flex: 1,
-                                            padding: "6px",
-                                            cursor:"pointer",
-                                            backgroundColor:"#ffc400",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "4px"
-                                        }}
+                                        style={{flex: 1, padding: "6px", cursor:"pointer", backgroundColor:"#ffc400",
+                                            color: "white", border: "none", borderRadius: "4px"}}
                                         onClick={() => this.setState({ OpenModal: "assign" })}
                                     >
                                         Assign Staff
                                     </button>
                                     <button
-                                        style={{
-                                            flex: 1,
-                                            padding: "6px",
-                                            cursor:"pointer",
-                                            backgroundColor:"#eeff00",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "4px"
-                                        }}
+                                        style={{flex: 1, padding: "6px", cursor:"pointer", backgroundColor:"#eeff00",
+                                            color: "white", border: "none", borderRadius: "4px"}}
                                         onClick={() => this.setState({ OpenModal: "view" })}
                                     >
                                         View Staff
@@ -330,15 +291,8 @@ class Tasks extends React.Component {
                                     assignment[1] === this.state.userID
                             )  &&(
                                 <button
-                                        style={{
-                                            flex: 1,
-                                            padding: "6px",
-                                            cursor: "pointer",
-                                            backgroundColor:"#1100ff",
-                                            color: "white",
-                                            border: "none",
-                                            borderRadius: "4px"
-                                        }}
+                                        style={{flex: 1, padding: "6px", cursor: "pointer", backgroundColor:"#1100ff",
+                                            color: "white", border: "none", borderRadius: "4px"}}
                                         onClick={() => this.setState({ OpenModal: "status" })}
                                     >
                                         Change Status
