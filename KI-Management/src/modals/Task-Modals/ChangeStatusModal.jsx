@@ -102,18 +102,15 @@ class ChangeStatusModal extends React.Component {
                         </button>    
                 </div></div>)}
 
-                {this.state.cur_status === 3 &&
+                {this.state.cur_status == 3 &&
                 (<div><div style={styles.modal}>
-                    <h3 style={{ marginTop: 0 }}>Placeholder</h3>         
+                    <h3 style={{ marginTop: 0 }}>This task has been completed.</h3>         
                     </div>
                     <div style={styles.actions}>
                         <button onClick={this.props.onClose} style={styles.cancel}>
                             Cancel
                         </button>
-
-                        <button onClick={() => this.setState({open_confirm: "complete"})} style={styles.submit}>
-                            Confirm
-                        </button>    
+                           
                 </div></div>)}
 
                 <ConfirmPopup

@@ -6,7 +6,7 @@ import EditTaskModal from "../modals/Task-Modals/EditTaskModal";
 import AssignStaffModal from "../modals/Task-Modals/AssignStaffModal";
 import ViewAssignedStaff from "../modals/Task-Modals/ViewAssignedStaff";
 import ChangeStatusModal from "../modals/Task-Modals/ChangeStatusModal";
-
+import SortTaskModal from "../modals/Task-Modals/SortTaskModal";
 
 class Tasks extends React.Component {
 
@@ -22,11 +22,126 @@ class Tasks extends React.Component {
             staff_assign: [],
             item_assign: [],
             selected_task: null,
-            OpenModal: "none"
+
+            //sort variables
+            sortField: "none",
+            sortDirection: "ASC",
+            prioritize_assigned: true,
+            sortText: "",
+            includeCompleted: false,
+
+            OpenModal: "none",
+            showSortModal: false
         }
 
     
     }
+
+    sortTasks= async () => {
+        this.setState({
+            selected_task: null
+        });
+
+        let updatedList = await this.fetchData();
+        updatedList = [...updatedList];
+        let filterIndex;
+        
+        
+        switch (this.state.sortField) {
+
+                case "Alphabetical":
+                    filterIndex = 1;
+                    break;
+
+                case "Category":
+                    filterIndex = 2;
+                    break;
+
+                case "Priority":
+                    filterIndex = 3;
+                    break;
+
+                case "Location":
+                    filterIndex = 10;
+                    break;
+                
+                case "Status":
+                    filterIndex = 12;
+                    break;
+
+                default:
+                    filterIndex = 1;
+            }
+        // FILTER USING SEARCH TEXT
+        if (this.state.sortText.trim() !== "" && this.state.sortField != "Priority" && this.state.sortField != "Status") {
+
+            updatedList = updatedList.filter((item) => {
+
+                const value = item[filterIndex]
+                    ?.toString()
+                    .toLowerCase()
+                    .trim();
+                
+                const search = this.state.sortText
+                    .toLowerCase()
+                    .trim();
+
+                    return value.includes(search);
+            });
+        }
+
+        if (!this.state.includeCompleted) {
+            updatedList = updatedList.filter((item) => {
+                return item[12] != 3;
+            });
+        }
+        
+
+        // SORT FIELD
+        updatedList.sort((a, b) => {
+
+
+
+            if (this.state.prioritize_assigned) {
+                const aLow = this.state.staff_assign.some(assignment =>
+                    assignment[0] === a[0] &&
+                    assignment[1] === this.state.userID)
+                const bLow = this.state.staff_assign.some(assignment =>
+                    assignment[0] === b[0] &&
+                    assignment[1] === this.state.userID)
+
+                if (aLow !== bLow) {
+                    return aLow ? -1 : 1;
+                }
+            }
+
+            let valueA;
+            let valueB;
+
+            valueA = a[filterIndex];
+            valueB = b[filterIndex];
+
+
+            if (typeof valueA === "string") {
+
+                const comparison = valueA.localeCompare(valueB);
+
+                return this.state.sortDirection === "ASC"
+                    ? comparison
+                    : -comparison;
+            }
+    
+            const comparison = valueA - valueB;
+
+            return this.state.sortDirection === "ASC"
+                ? comparison
+                : -comparison;
+        });
+
+    this.setState({
+        tasks: updatedList
+    });
+}
 
     refreshSelectedTask = async () => {
     await this.fetchData();
@@ -42,7 +157,7 @@ class Tasks extends React.Component {
     
 
     componentDidMount() {
-        this.fetchData();
+        this.sortTasks();
     }
 
 
@@ -57,9 +172,11 @@ class Tasks extends React.Component {
                 item_assign: data.item_assign || []
             });
             
+            return data.tasks;
 
         } catch (error) {
             console.log(error);
+            return[];
         }
     };
 
@@ -101,7 +218,7 @@ class Tasks extends React.Component {
                             borderRadius: "4px",
                             boxSizing: "border-box"
                         }}
-                        onClick={() => this.setState({ OpenModal: "sort" })}
+                        onClick={() => this.setState({showSortModal: true})}
                     >
                         Sort Tasks
                     </button>
@@ -125,33 +242,15 @@ class Tasks extends React.Component {
                                         });
                                     }
                                 }}
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                padding: "12px 18px",
-                                marginBottom: "12px",
-                                borderRadius: "15px",
+                            style={{display: "flex", justifyContent: "space-between", alignItems: "center",
+                                padding: "12px 18px", marginBottom: "12px", borderRadius: "15px",
                                 backgroundColor: this.state.selected_task?.[0] === task[0] ? "#e8ddff" : "#f5f5f5",
-                                boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                                cursor: "pointer"
-                            }}
-                        >
-                            <span
-                                style={{
-                                    fontWeight: "600"
-                                }}
-                            >
+                                boxShadow: "0 2px 5px rgba(0,0,0,0.1)", cursor: "pointer"}}>
+                            <span style={{fontWeight: "600"}}>
                                 {task[1]}
                             </span>
 
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "8px"
-                                }}
-                            >
+                            <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
                                 <span
                                     style={{
                                         color: "#666"
@@ -165,19 +264,15 @@ class Tasks extends React.Component {
                                         width: "10px",
                                         height: "10px",
                                         borderRadius: "50%",
-                                        backgroundColor: this.state.staff_assign.some(
-                                            assignment =>
-                                                assignment[0] === task[0] &&
-                                                assignment[1] === this.state.userID
-                                        )
+                                        backgroundColor: this.state.staff_assign.some(assignment =>
+                                            assignment[0] === task[0] &&
+                                            assignment[1] === this.state.userID)
                                             ? "#22c55e" // green when assigned
                                             : "#ffffff", // white otherwise
                                         border: "1px solid #bbb"
                                     }}
                                 />
                             </div>
-                                
-                            
                         </div>
                     ))}
                 </div>
@@ -254,6 +349,21 @@ class Tasks extends React.Component {
                         task={this.state.selected_task}
                         onClose={() => {this.refreshSelectedTask()}}
                     />
+                    <SortTaskModal
+                        isOpen={this.state.showSortModal}
+                        onClose={() =>
+                            this.setState({
+                                showSortModal: false
+                            })
+                        }
+                        onSubmit={(data) => {
+                            this.setState(
+                                {sortText: data.searchText, sortField: data.sortBy, sortDirection: data.sortDirection,
+                                prioritize_assigned: data.prioritizeAssigned,
+                                includeCompleted: data.includeCompleted, showSortModal: false},
+                                () => {this.sortTasks();}
+                            );
+                        }}/>
 
 
 

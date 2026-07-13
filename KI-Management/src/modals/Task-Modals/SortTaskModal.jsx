@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function SortListModal({
+export default function SortTaskModal({
   isOpen,
   onClose,
   onSubmit,
@@ -8,38 +8,19 @@ export default function SortListModal({
   const [searchText, setSearchText] = useState("");
   const [sortDirection, setSortDirection] = useState("ASC");
   const [sortBy, setSortBy] = useState("Alphabetical");
-  const [perfectMatch, setPerfectMatch] = useState(false);
-  const [lowStock, setLowStock] = useState(false);
-  const [lowStockOnly, setLowStockOnly] = useState(false);
+  const [includeCompleted, setIncludeCompleted] = useState(false);
+  const [prioritizeAssigned, setprioritizeAssigned] = useState(true);
 
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    onSubmit?.({
-      searchText,
-      sortDirection,
-      sortBy,
-      perfectMatch,
-      lowStock,
-      lowStockOnly,
-    });
+    onSubmit?.({searchText, sortDirection, sortBy, prioritizeAssigned, includeCompleted,});
   };
 
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999
-      }}
-    >
+      style={{position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.4)",
+        display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999}}>
       <div
         style={{
           width: "400px",
@@ -53,7 +34,7 @@ export default function SortListModal({
           Sort & Filter
         </h2>
 
-        <div style={{ marginBottom: "16px" }}>
+        {sortBy != "Status" && sortBy != "Priority" &&(<div style={{ marginBottom: "16px" }}>
           <label>Search</label>
 
           <input
@@ -67,27 +48,8 @@ export default function SortListModal({
               marginTop: "4px"
             }}
           />
-        </div>
+        </div>)}
             <div style={{ marginTop: "10px" }}>
-            <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
-            >
-                <input
-                    type="checkbox"
-                    checked={perfectMatch}
-                    onChange={(e) =>
-                        setPerfectMatch(e.target.checked)
-                    }
-                />
-
-                Perfect Match
-
-            </label>
 
             <label
                 style={{
@@ -99,13 +61,13 @@ export default function SortListModal({
             >
                 <input
                     type="checkbox"
-                    checked={lowStock}
+                    checked={prioritizeAssigned}
                     onChange={(e) =>
-                        setLowStock(e.target.checked)
+                        setprioritizeAssigned(e.target.checked)
                     }
                 />
 
-                Prioritize Low Stock
+                Prioritize Assigned
 
             </label>
             <label
@@ -118,13 +80,13 @@ export default function SortListModal({
             >
                 <input
                     type="checkbox"
-                    checked={lowStockOnly}
+                    checked={includeCompleted}
                     onChange={(e) =>
-                        setLowStockOnly(e.target.checked)
+                        setIncludeCompleted(e.target.checked)
                     }
                 />
 
-                Only Show Low Stock
+                Show Completed Tasks
 
             </label>
         </div>
@@ -166,11 +128,10 @@ export default function SortListModal({
               }}
             >
               <option value="Alphabetical">Alphabetical</option>
-              <option value="Current Amount">Units On Hand</option>
               <option value="Category">Category</option>
-              <option value="Unit Cost">Unit Cost</option>
+              <option value="Priority">Priority</option>
               <option value="Location">Location</option>
-              <option value="Supplier">Supplier</option>
+              <option value="Status">Status</option>
             </select>
           </div>
         </div>

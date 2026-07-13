@@ -371,11 +371,11 @@ class Inventory extends React.Component {
         const freshData = await this.fetchData();
         if (!freshData) return;
         let updatedList = [...freshData];
-
+        let filterIndex = 1;
         // FILTER USING SEARCH TEXT
         if (this.state.sortText.trim() !== "") {
 
-            let filterIndex = 1;
+            
 
             switch (this.state.sortField) {
 
@@ -450,42 +450,10 @@ class Inventory extends React.Component {
             let valueA;
             let valueB;
 
-            switch (this.state.sortField) {
+            
+            valueA = a[filterIndex];
+            valueB = b[filterIndex];
 
-                case "Alphabetical":
-                    valueA = a[1];
-                    valueB = b[1];
-                    break;
-
-                case "Current Amount":
-                    valueA = a[4];
-                    valueB = b[4];
-                    break;
-
-                case "Category":
-                    valueA = a[3];
-                    valueB = b[3];
-                    break;
-
-                case "Unit Cost":
-                    valueA = a[7];
-                    valueB = b[7];
-                    break;
-
-                case "Location":
-                    valueA = a[9];
-                    valueB = b[9];
-                    break;
-
-                case "Supplier":
-                    valueA = a[10];
-                    valueB = b[10];
-                    break;
-
-                default:
-                    valueA = a[1];
-                    valueB = b[1];
-            }
 
             if (typeof valueA === "string") {
 
