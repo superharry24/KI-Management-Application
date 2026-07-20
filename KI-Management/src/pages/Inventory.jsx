@@ -42,7 +42,6 @@ class Inventory extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchData();
         this.sortList();
     }
 
@@ -372,12 +371,8 @@ class Inventory extends React.Component {
         if (!freshData) return;
         let updatedList = [...freshData];
         let filterIndex = 1;
-        // FILTER USING SEARCH TEXT
-        if (this.state.sortText.trim() !== "") {
-
-            
-
-            switch (this.state.sortField) {
+        
+        switch (this.state.sortField) {
 
                 case "Alphabetical":
                     filterIndex = 1;
@@ -406,6 +401,12 @@ class Inventory extends React.Component {
                 default:
                     filterIndex = 1;
             }
+        // FILTER USING SEARCH TEXT
+        if (this.state.sortText.trim() !== "") {
+
+            
+
+            
 
             updatedList = updatedList.filter((item) => {
 

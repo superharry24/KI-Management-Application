@@ -1,10 +1,10 @@
 /*remove before sending out*/
 /*DROP table if EXISTS users CASCADE;
 DROP table if EXISTS items CASCADE;
-DROP table if EXISTS item_update_log CASCADE;*/
+DROP table if EXISTS item_update_log CASCADE;
 DROP table if EXISTS tasks CASCADE;
 DROP table if EXISTS task_assigned_staff CASCADE;
-DROP table if EXISTS task_required_items CASCADE;
+DROP table if EXISTS task_required_items CASCADE;*/
 DROP table if EXISTS rooms CASCADE;
 DROP table if EXISTS room_overlaps CASCADE;
 DROP table if EXISTS large_items CASCADE;
@@ -51,7 +51,7 @@ CREATE TABLE item_update_log (
     edit BOOLEAN DEFAULT FALSE,
     date TIMESTAMP NOT NULL,
     created BOOLEAN DEFAULT FALSE
-);*/
+);
 
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -83,6 +83,7 @@ CREATE TABLE task_required_items (
     --add automatic decrease on completion?
     PRIMARY KEY(task_id, item_id)
 );
+*/
 
 
 CREATE TABLE rooms(
@@ -117,7 +118,8 @@ CREATE TABLE events(
     attendees INT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    date DATE NOT NULL
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
 );
 
 CREATE TABLE event_small_items (

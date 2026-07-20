@@ -39,7 +39,6 @@ def reset_repeatable_tasks(): #finds all repeatable tasks, if they're past their
         FROM tasks
         WHERE repeat_interval != 0
           AND repeat_threshold IS NOT NULL
-          AND status IN (2,3)
     """)
 
     now = datetime.now()
@@ -56,20 +55,32 @@ def reset_repeatable_tasks(): #finds all repeatable tasks, if they're past their
                     new_time += relativedelta(months=task[2])
                 elif(task[1] == 4):
                     new_time += relativedelta(years=task[2])
-            exec_commit("""
-                UPDATE tasks
-                SET status = 1,
-                repeat_threshold = %s,
-                complete_data = NULL
-                WHERE id = %s
-            """, (new_time, task[0]))
+            if(task[4] == 0):
+                exec_commit("""
+                    UPDATE tasks
+                    SET repeat_threshold = %s,
+                    complete_date = NULL
+                    WHERE id = %s
+                """, (new_time, task[0]))
+            
+            else:
+                exec_commit("""
+                    UPDATE tasks
+                    SET status = 1,
+                    repeat_threshold = %s,
+                    complete_date = NULL
+                    WHERE id = %s
+                """, (new_time, task[0]))
 
 def get_status(task_id):
     result =  exec_get_one("SELECT status FROM tasks WHERE id = %s", (task_id,))
     return result[0] if result else None
 
 def assign_status(task_id, status):
-    exec_commit("UPDATE tasks SET status = %s WHERE id = %s",(status, task_id))
+    if(status == 3):
+        exec_commit("UPDATE tasks SET status = %s, complete_date = CURRENT_TIMESTAMP WHERE id = %s",(status, task_id))
+    else:
+        exec_commit("UPDATE tasks SET status = %s WHERE id = %s",(status, task_id))
     
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -249,8 +260,6 @@ class TasksManageApi(Resource):
         args = parser.parse_args()   
         if(args['type'] == 1):
             assign_status(args['task_id'], args['status'])
-            if(args['status'] == "3"):
-                exec_commit("SET complete_date = CURRENT_TIMESTAMP WHERE id = %s", (args['task_id'],))
             return {"status": "status updated"}, 201
         
         elif(args['type'] == 2):
@@ -302,7 +311,84 @@ class TasksManageApi(Resource):
 
 class EventsManageApi(Resource):
     def get(self):
-        x = 8
+        result1 = clean_data(exec_get_all("SELECT * FROM events"))
+        result2 = clean_data(exec_get_all("SELECT * FROM rooms"))
+        result3 = clean_data(exec_get_all("SELECT * FROM room_overlaps"))
+        result4 = clean_data(exec_get_all("SELECT * FROM large_items"))
+        result5 = clean_data(exec_get_all("SELECT * FROM small_items"))
+        result6 = clean_data(exec_get_all("SELECT * FROM event_large_items"))
+        result7 = clean_data(exec_get_all("SELECT * FROM event_small_items"))
+        return {
+            "events": result1,
+            "rooms": result2,
+            "overlaps": result3,
+            "large": result4,
+            "small": result5,
+            "large_assign": result6,
+            "small_assign": result7,
+        }, 200
+    def post(self):
+        #assigns items to events
+        parser = reqparse.RequestParser()
+        parser.add_argument('event_id', type=int)
+        parser.add_argument('item_id', type=int)
+        parser.add_argument('type', type=int) #0 for large, 1 for small
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+        sql = ""
+        if args['type'] == 0:
+            sql = """INSERT INTO event_large_items(event_id, large_item_id, amount)
+            VALUES (%s, %s, %s)"""
+
+        else:
+            sql = """INSERT INTO event_small_items(event_id, small_item_id, amount)
+            VALUES (%s, %s, %s)"""
+
+        exec_commit(sql, (args['event_id'], args['item_id'], args['amount']))
+        return {"status": "assigned"}, 201
+    
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('event_id', type=int)
+        parser.add_argument('item_id', type=int)
+        parser.add_argument('type', type=int) #0 for large, 1 for small
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+        sql = ""
+        if args['type'] == 0:
+            sql = """UPDATE event_large_items
+            SET amount = %s
+            WHERE event_id = %s
+            AND item_id = %s"""
+
+        else:
+            sql = """UPDATE event_large_items
+            SET amount = %s
+            WHERE event_id = %s
+            AND item_id = %s"""
+
+        exec_commit(sql, (args['amount'], args['item_id'], args['event_id']))
+        return {"status": "assigned"}, 201
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('event_id', type=int)
+        parser.add_argument('item_id', type=int)
+        parser.add_argument('type', type=int) #0 for large, 1 for small
+        args = parser.parse_args()
+
+        sql = ""
+        if args['type'] == 0:
+            sql = """DELETE FROM event_large_items
+                WHERE event_id = %s
+                AND item_id = %s"""
+        else:
+            sql = """DELETE FROM event_small_items
+                WHERE event_id = %s
+                AND item_id = %s"""
+        exec_commit(sql, (args['event_id'], args['item_id']))
+        return {"deleted": True}, 200
+
 
 class UsersApi(Resource):
     def get(self):
@@ -406,20 +492,169 @@ class StaffAssignApi(Resource):
 
 
 class RoomsApi(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str)
+        parser.add_argument('large_limit', type=int)
+        parser.add_argument('capacity', type=int)
+        args = parser.parse_args()
+
+        sql = """INSERT INTO rooms(name, large_limit, people_limit)
+        VALUES (%s, %s, %s)"""
+        exec_commit(sql, (args['name'], args['large_limit'], args['capacity']))
+
+        return {"created": True}, 200
+    
     def put(self):
-        x = 8
+        parser = reqparse.RequestParser()
+        parser.add_argument('room_id', type=int)
+        parser.add_argument('name', type=str)
+        parser.add_argument('large_limit', type=int)
+        parser.add_argument('capacity', type=int)
+        args = parser.parse_args()
+
+        sql = """UPDATE rooms
+        SET name = %s,
+        large_limit = %s,
+        people_limit = %s
+        WHERE id = %s"""
+        exec_commit(sql, (args['name'], args['large_limit'], args['capacity'], args['room_id']))
+
+        return {"updated": True}, 200
+        
 
 
 class LargeItemsApi(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()        
+        parser.add_argument('name', type=str)
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+
+        sql = """INSERT INTO large_items(name, amount)
+        VALUES (%s, %s)"""
+        exec_commit(sql, (args['name'], args['amount']))
+
+        return {"created": True}, 200
+    
     def put(self):
-        x = 8
+        #change amount handled by frontend
+        parser = reqparse.RequestParser()
+        parser.add_argument('item_id', type=int)
+        parser.add_argument('name', type=str)
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+
+        sql = """UPDATE large_items
+        SET name = %s,
+        amount = %s
+        WHERE id = %s"""
+        exec_commit(sql, (args['name'], args['amount'], args['item_id']))
+
+        return {"updated": True}, 200
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('item_id', type=int)
+        args = parser.parse_args()
+
+        sql = """DELETE FROM large_items
+            WHERE id = %s"""
+        exec_commit(sql, (args['item_id'],))
+        
+
+        return {"deleted": True}, 200
 
 
 class SmallItemsApi(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()        
+        parser.add_argument('name', type=str)
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+
+        sql = """INSERT INTO small_items(name, amount)
+        VALUES (%s, %s)"""
+        exec_commit(sql, (args['name'], args['amount']))
+
+        return {"created": True}, 200
+    
     def put(self):
-        x = 8
+        parser = reqparse.RequestParser()
+        parser.add_argument('item_id', type=int)
+        parser.add_argument('name', type=str)
+        parser.add_argument('amount', type=int)
+        args = parser.parse_args()
+
+        sql = """UPDATE small_items
+        SET name = %s,
+        amount = %s
+        WHERE id = %s"""
+        exec_commit(sql, (args['name'], args['amount'], args['item_id']))
+
+        return {"updated": True}, 200
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('item_id', type=int)
+        args = parser.parse_args()
+
+        sql = """DELETE FROM small_items
+            WHERE id = %s"""
+        exec_commit(sql, (args['item_id'],))
+        
+
+        return {"deleted": True}, 200
 
 
-class EventsApi(Resource):
+class EventsAPI(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str)
+        parser.add_argument('attendees', type=int)
+        parser.add_argument('start', type=str)
+        parser.add_argument('end', type=str)
+        parser.add_argument('start_date', type=str)
+        parser.add_argument('end_date', type=str)
+        args = parser.parse_args()
+
+        sql = """INSERT INTO events(name, attendees, start_time, end_time, start_date, end_date)
+        VALUES (%s, %s, %s, %s, %s, %s)"""
+        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['start_date'], args['end_date']))
+
+        return {"created": True}, 200
+    
     def put(self):
-        x = 8
+        parser = reqparse.RequestParser()
+        parser.add_argument('event_id', type=int)
+        parser.add_argument('name', type=str)
+        parser.add_argument('attendees', type=int)
+        parser.add_argument('start', type=str)
+        parser.add_argument('end', type=str)
+        parser.add_argument('start_date', type=str)
+        parser.add_argument('end_date', type=str)
+        args = parser.parse_args()
+
+        sql = """UPDATE events
+        SET name = %s,
+        attendees = %s,
+        start_time = %s,
+        end_time = %s,
+        start_date = %s,
+        end_date = %s
+        WHERE id = %s"""
+        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['start_date'], args['end_date'], args['event_id']))
+
+        return {"updated": True}, 200
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('event_id', type=int)
+        args = parser.parse_args()
+
+        sql = """DELETE FROM events
+            WHERE id = %s"""
+        exec_commit(sql, (args['event_id'],))
+        
+
+        return {"deleted": True}, 200

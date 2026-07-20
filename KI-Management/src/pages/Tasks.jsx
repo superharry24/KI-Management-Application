@@ -28,7 +28,7 @@ class Tasks extends React.Component {
             sortDirection: "ASC",
             prioritize_assigned: true,
             sortText: "",
-            includeCompleted: false,
+            includeCompleted: true,
 
             OpenModal: "none",
             showSortModal: false
@@ -139,7 +139,9 @@ class Tasks extends React.Component {
         });
 
     this.setState({
-        tasks: updatedList
+        tasks: updatedList,
+        OpenModal: "none",
+        selected_task: null
     });
 }
 

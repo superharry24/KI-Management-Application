@@ -8,7 +8,7 @@ export default function SortTaskModal({
   const [searchText, setSearchText] = useState("");
   const [sortDirection, setSortDirection] = useState("ASC");
   const [sortBy, setSortBy] = useState("Alphabetical");
-  const [includeCompleted, setIncludeCompleted] = useState(false);
+  const [includeCompleted, setIncludeCompleted] = useState(true);
   const [prioritizeAssigned, setprioritizeAssigned] = useState(true);
 
   if (!isOpen) return null;

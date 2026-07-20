@@ -200,7 +200,7 @@ class EditTaskModal extends React.Component {
                                 <input type="number" name="interval_amount" placeholder="0" value={this.state.interval_amount} onChange={this.handleChange} style={inputStyle} />
                             </div>
                             <div style={styles.field}>
-                                <label style={styles.label}>Next Repeat Date:</label>
+                                <label style={styles.label}>Next Repeat Date(leave blank to not change):</label>
                                 <input
                                     type="date"
                                     name="first_repeat_date"
