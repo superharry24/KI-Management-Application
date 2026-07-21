@@ -607,7 +607,7 @@ class SmallItemsApi(Resource):
         return {"deleted": True}, 200
 
 
-class EventsAPI(Resource):
+class EventsApi(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str)

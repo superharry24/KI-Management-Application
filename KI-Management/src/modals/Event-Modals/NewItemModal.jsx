@@ -1,0 +1,1 @@
+//Sets name, amount on hand, and chooses whether item is large or small.

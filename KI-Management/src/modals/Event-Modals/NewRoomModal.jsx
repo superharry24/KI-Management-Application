@@ -1,0 +1,1 @@
+//Name, Max Occupancy, max large items. Decide linked rooms

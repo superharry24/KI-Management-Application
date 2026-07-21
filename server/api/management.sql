@@ -118,8 +118,7 @@ CREATE TABLE events(
     attendees INT NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL
+    date DATE NOT NULL
 );
 
 CREATE TABLE event_small_items (
