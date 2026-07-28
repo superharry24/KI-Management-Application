@@ -492,6 +492,10 @@ class StaffAssignApi(Resource):
 
 
 class RoomsApi(Resource):
+    def get(self):
+        result = clean_data(exec_get_all("SELECT * FROM rooms"))
+        return {"rooms": result}, 200
+    
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str)
@@ -525,6 +529,15 @@ class RoomsApi(Resource):
 
 
 class LargeItemsApi(Resource):
+    def get(self):        
+        #used as a general get for both items
+        result1 = clean_data(exec_get_all("SELECT * FROM large_items"))
+        result2 = clean_data(exec_get_all("SELECT * FROM small_items"))
+        return {            
+            "large": result1,
+            "small": result2,
+        }, 200
+
     def post(self):
         parser = reqparse.RequestParser()        
         parser.add_argument('name', type=str)
@@ -608,19 +621,26 @@ class SmallItemsApi(Resource):
 
 
 class EventsApi(Resource):
+    def get(self):
+        date = request.args.get("date")
+        sql = """SELECT * FROM events WHERE date = %s"""
+        results = exec_get_all(sql, (date, ))
+        return {"events": results}, 200
+            
+
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str)
         parser.add_argument('attendees', type=int)
-        parser.add_argument('start', type=str)
-        parser.add_argument('end', type=str)
-        parser.add_argument('start_date', type=str)
-        parser.add_argument('end_date', type=str)
+        parser.add_argument('start_time', type=str)
+        parser.add_argument('end_time', type=str)
+        parser.add_argument('date', type=str)
+        parser.add_argument('room', type=int)
         args = parser.parse_args()
 
-        sql = """INSERT INTO events(name, attendees, start_time, end_time, start_date, end_date)
+        sql = """INSERT INTO events(name, attendees, start_time, end_time, date, room_id)
         VALUES (%s, %s, %s, %s, %s, %s)"""
-        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['start_date'], args['end_date']))
+        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['date'], args['room']))
 
         return {"created": True}, 200
     

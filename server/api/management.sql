@@ -116,9 +116,10 @@ CREATE TABLE events(
     id   SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
     attendees INT NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
-    date DATE NOT NULL
+    start_time  VARCHAR(10) NOT NULL, /*connects with the times array in events*/
+    end_time VARCHAR(10) NOT NULL,
+    date DATE NOT NULL,
+    room_id INT REFERENCES rooms(id)
 );
 
 CREATE TABLE event_small_items (

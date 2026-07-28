@@ -1,5 +1,5 @@
 import React from "react";
-import "./CalendarFixer.css";
+import "../CalendarFixer.css";
 import ConfirmPopup from "../ConfirmPopup";
 
 class EditTaskModal extends React.Component {

@@ -1,5 +1,5 @@
 import React from "react";
-import "./CalendarFixer.css";
+import "../CalendarFixer.css";
 
 class NewTaskModal extends React.Component {
     constructor(props) {
