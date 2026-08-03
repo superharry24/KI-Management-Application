@@ -525,6 +525,21 @@ class RoomsApi(Resource):
         exec_commit(sql, (args['name'], args['large_limit'], args['capacity'], args['room_id']))
 
         return {"updated": True}, 200
+
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('room_id', type=int)
+        args = parser.parse_args()
+
+        sql = """DELETE FROM events
+            WHERE room_id = %s"""
+        exec_commit(sql, (args['room_id'],))
+    
+        sql = """DELETE FROM rooms
+            WHERE id = %s"""
+        exec_commit(sql, (args['room_id'],))
+   
+        return {"deleted": True}, 200
         
 
 
@@ -678,3 +693,37 @@ class EventsApi(Resource):
         
 
         return {"deleted": True}, 200
+
+
+class OverlapApi(Resource):
+    def get(self):
+        room_id = request.args.get("room")
+        sql = """SELECT overlapping_room_id FROM room_overlaps WHERE room_id = %s"""
+        results = exec_get_all(sql, (room_id, ))
+        return {"linked": results}, 200
+
+    def post(self):
+        data = request.get_json()
+
+        room_id = data.get("room_id")
+        other_id = data.get("other_id")
+
+
+        sql = """INSERT INTO room_overlaps(room_id, overlapping_room_id)
+            VALUES (%s, %s)"""
+        exec_commit(sql, (room_id, other_id))
+    
+        return {"created": True}, 200
+
+    def delete(self):
+        data = request.get_json()
+        
+        room_id = data.get("room_id")
+        other_id = data.get("other_id")
+        
+        sql = """DELETE FROM room_overlaps 
+        WHERE room_id = %s
+        AND overlapping_room_id = %s"""
+        exec_commit(sql, (room_id, other_id))
+        
+        return {"unlinked": True}, 200

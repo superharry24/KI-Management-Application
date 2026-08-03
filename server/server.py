@@ -19,6 +19,8 @@ api.add_resource(StaffAssignApi,'/task')
 api.add_resource(LargeItemsApi,'/table')
 api.add_resource(SmallItemsApi,'/chair')
 api.add_resource(EventsApi,'/event')
+api.add_resource(OverlapApi,'/overlap')
+
 
 
 

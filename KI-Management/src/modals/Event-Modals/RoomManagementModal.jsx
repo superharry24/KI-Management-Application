@@ -5,6 +5,8 @@ import React from "react";
 import ConfirmPopup from "../ConfirmPopup";
 import { json } from "react-router-dom";
 import NewRoomModal from "./NewRoomModal";
+import EditRoomModal from "./EditRoomModal";
+import LinkRoomsModal from "./LinkRoomsModal";
 class RoomManagementModal extends React.Component {
     constructor(props) {
         super(props);
@@ -104,16 +106,9 @@ class RoomManagementModal extends React.Component {
                         </div>
                         {/*List */}
                         {this.state.rooms.map((room) => (
-                            <div
-                                key={room[0]}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    borderBottom: "1px solid #ddd",
-                                    padding: "10px 0"
-                                }}
-                            >
+                            <div key={room[0]}
+                                style={{display: "flex", justifyContent: "space-between", alignItems: "center",
+                                    borderBottom: "1px solid #ddd", padding: "10px 0"}}>
                                 <div>
                                     {room[1]}                                    
                                 </div>
@@ -121,29 +116,15 @@ class RoomManagementModal extends React.Component {
                                 <div>
                                     <button
                                         onClick={() => this.setState({open_modal: "edit", selectedRoom: room})}
-                                        style={{
-                                            backgroundColor: "#e4a227",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "8px 16px",
-                                            borderRadius: "4px",
-                                            cursor: "pointer"
-                                        }}
-                                    >
+                                        style={{backgroundColor: "#e4a227", color: "white", border: "none",
+                                            padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                                         Edit room
                                     </button>
 
                                     <button
                                         onClick={() => this.setState({open_modal: "link", selectedRoom: room})}
-                                        style={{
-                                            backgroundColor: "#3540dc",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "8px 16px",
-                                            borderRadius: "4px",
-                                            cursor: "pointer"
-                                        }}
-                                    >
+                                        style={{backgroundColor: "#3540dc", color: "white", border: "none",
+                                            padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                                         Link Rooms
                                     </button>
                                 </div>
@@ -163,34 +144,37 @@ class RoomManagementModal extends React.Component {
 
                         <button
                             onClick={() => this.setState({open_modal: "new"})}
-                            style={{
-                                backgroundColor: "#35dc40",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
-                        >
+                            style={{backgroundColor: "#35dc40", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                             New Room
                         </button>
 
                         <button
                             onClick={this.props.onClose}
-                            style={{
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
-                        >
+                            style={{backgroundColor: "#dc3545", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                             Close
                         </button>
                     </div>
                     <NewRoomModal
-                        isOpen={this.state.open_modal === "new"}
+                        isOpen = {this.state.open_modal === "new"}
+                        onClose = {() => {
+                            this.setState({ open_modal: "none" });
+                            this.fetchData();
+                        }}
+                    />
+                    <EditRoomModal
+                        isOpen = {this.state.open_modal === "edit"}
+                        room = {this.state.selectedRoom}
+                        onClose={() => {
+                            this.setState({ open_modal: "none" });
+                            this.fetchData();
+                        }}
+                    />
+                    <LinkRoomsModal
+                        isOpen = {this.state.open_modal === "link"}
+                        room = {this.state.selectedRoom}
+                        rooms = {this.state.rooms}
                         onClose={() => {
                             this.setState({ open_modal: "none" });
                             this.fetchData();
@@ -208,9 +192,6 @@ class RoomManagementModal extends React.Component {
 }
 
 const styles = {
-
-
-
 };
 
 

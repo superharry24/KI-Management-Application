@@ -19,6 +19,7 @@ class NewEventModal extends React.Component {
             show_unavailable_rooms: false,
             times: [],
             events: [],
+            overlaps: [],
             error: ""
         };
     }
@@ -37,6 +38,7 @@ class NewEventModal extends React.Component {
                 show_unavailable_rooms: false,
                 times: this.props.times,
                 events: this.props.events,
+                overlaps: this.props.overlaps,
                 error: ""
             });
         }
@@ -87,6 +89,44 @@ class NewEventModal extends React.Component {
                 return event;
             }
         }
+
+        for (const [room1, room2] of this.state.overlaps) {
+            if (room1 === room) {
+                const event = this.checkLinkedTimeAvailable(start, end, room2, date);
+                if (event != null) {
+                    return event;
+                }
+            }
+            if (room2 === room) {
+                const event = this.checkLinkedTimeAvailable(start, end, room1, date);
+                if (event != null) {
+                    return event;
+                }
+            }
+        }
+
+        return null;
+    };
+
+    checkLinkedTimeAvailable = (start, end, room, date) => {
+        if (!start || !end) {
+            return null;
+        }
+
+        const newStart = this.timeToMinutes(start);
+        const newEnd = this.timeToMinutes(end);
+
+        for (const event of this.state.events) {
+            if (event[6] !== room || event[5] !== date) continue;
+
+            const eventStart = this.timeToMinutes(event[3]);
+            const eventEnd = this.timeToMinutes(event[4]);
+
+            if (newStart < eventEnd && newEnd > eventStart) {
+                return event;
+            }
+        }
+
 
         return null;
     };
@@ -217,22 +257,15 @@ class NewEventModal extends React.Component {
 
                         <label style={{display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
                             <input
-                                type="checkbox"
-                                name="show_unavailable_rooms"
-                                checked={this.state.show_unavailable_rooms}
-                                onChange={this.handleChange}
-                            />
+                                type="checkbox" name="show_unavailable_rooms"
+                                checked={this.state.show_unavailable_rooms} onChange={this.handleChange}/>
                             Show unavailable rooms
                         </label>
                         
                         <div style={styles.field}>
                             <label style={styles.label}>Room:</label>
-                            <select
-                                name="selected_room"
-                                value={this.state.selected_room || ""}
-                                onChange={this.handleChange}
-                                style={inputStyle}
-                            >
+                            <select name="selected_room" value={this.state.selected_room || ""}
+                                onChange={this.handleChange} style={inputStyle}>
                                 <option value="">Select Room</option>
 
                                 {availableRooms.map((room) => (

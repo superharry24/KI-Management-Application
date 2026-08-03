@@ -56,31 +56,12 @@ class ItemManagementModal extends React.Component {
 
         return (
             <div
-                style={{
-                    position: "fixed",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 99999
-                }}
-            >
+                style={{position: "fixed", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    display: "flex", justifyContent: "center", alignItems: "center", zIndex: 99999}}>
                 <div
-                    style={{
-                        
-                        width: "800px",
-                        maxWidth: "90vw",
-                        height: "700px",
-                        maxHeight: "90vh",
-                        backgroundColor: "white",
-                        borderRadius: "12px",
-                        padding: "24px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}
-                >
+                    style={{width: "800px", maxWidth: "90vw", height: "700px", maxHeight: "90vh",
+                        backgroundColor: "white", borderRadius: "12px", padding: "24px",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)", display: "flex",  flexDirection: "column"}}>
                     <h2 style={{ color: "#000000", marginBottom: "20px" }}>
                         Small Items
                     </h2>
@@ -170,39 +151,20 @@ class ItemManagementModal extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
-                    >
+                        style={{display: "flex",justifyContent: "flex-end", gap: "10px"}}>
                         
 
                         <button
                             onClick={() => this.setState({open_modal: "new"})}
-                            style={{
-                                backgroundColor: "#35dc40",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
-                        >
+                            style={{backgroundColor: "#35dc40", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                             New Item
                         </button>
 
                         <button
                             onClick={this.props.onClose}
-                            style={{
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
-                        >
+                            style={{backgroundColor: "#dc3545", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}>
                             Close
                         </button>
                     </div>

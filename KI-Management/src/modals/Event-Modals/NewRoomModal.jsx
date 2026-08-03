@@ -30,7 +30,7 @@ class NewRoomModal extends React.Component {
         const { name, value } = e.target;
 
         this.setState({
-            [name]: name === "attendees"
+            [name]: name === "max_occupancy" || name === "max_large"
                 ? Number(value)
                 : value
         });
@@ -79,7 +79,7 @@ class NewRoomModal extends React.Component {
             {
                 const data = {name: roomName, large_limit: max_large, capacity: max_occupancy};
                 try {await this.addRoom(data);this.props.onClose();
-                } catch (e) {this.setState({ error: "Failed to create event" });}
+                } catch (e) {this.setState({ error: "Failed to create room" });}
             }
             
         };

@@ -100,6 +100,38 @@ class Events extends React.Component {
                 }
             }
         }
+        for (const [room1, room2] of this.state.overlaps) {
+            if (room1 === room) {
+                const event = this.checkLinkedTimeAvailable(time, room2, date);
+                if (event != null) {
+                    return event;
+                }
+            }
+            if (room2 === room) {
+                const event = this.checkLinkedTimeAvailable(time, room1, date);
+                if (event != null) {
+                    return event;
+                }
+            }
+        }
+        
+        
+        return null;
+    }
+
+    checkLinkedTimeAvailable = (time, room, date) =>
+    {
+        const minTime = this.timeToMinutes(time)
+        for(const event of this.state.curEvents)
+        {
+            if(event[6] == room && date == event[5])
+            {
+                if(minTime >= this.timeToMinutes(event[3]) && minTime < this.timeToMinutes(event[4]))
+                {
+                    return event;
+                }
+            }
+        }
         return null;
     }
     
@@ -132,7 +164,7 @@ class Events extends React.Component {
             
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "40px"}}>
                 <div style={{flexDirection: "row", display: "flex"}}>
-                    <button
+                    {this.state.admin &&(<button
                             style={{
                                 padding: "10px",
                                 marginBottom: "12px",
@@ -146,9 +178,9 @@ class Events extends React.Component {
                             onClick={() => this.setState({openModal: "rooms"})}
                         >
                             Manage Rooms
-                    </button>
+                    </button>)}
 
-                    <button
+                    {this.state.admin &&(<button
                             style={{
                                 padding: "10px",
                                 marginBottom: "12px",
@@ -162,9 +194,9 @@ class Events extends React.Component {
                             onClick={() => this.setState({openModal: "items"})}
                         >
                             Manage Items
-                    </button>
+                    </button>)}
 
-                    <button
+                    {this.state.admin &&(<button
                             style={{
                                 padding: "10px",
                                 marginBottom: "12px",
@@ -178,7 +210,7 @@ class Events extends React.Component {
                             onClick={() => this.setState({openModal: "newEvent"})}
                         >
                             New Event
-                    </button>
+                    </button>)}
                 </div>
                 <div style={{position: "relative", width: "100%", marginBottom: "20px",
                         fontSize: "20px", fontWeight: "bold"}}>
@@ -290,9 +322,11 @@ class Events extends React.Component {
                         times = {this.state.times}
                         rooms = {this.state.rooms}
                         events = {this.state.events}
+                        overlaps = {this.state.overlaps}
                         onClose={() => {
                             this.setState({ OpenModal: "none" });
                             this.fetchData();
+                            this.fetchDayEvents(this.state.viewDate);
                         }}
                     />
             </div>
