@@ -123,7 +123,7 @@ class NewItemModal extends React.Component {
                             <input name="itemName" placeholder="Item Name" onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>
-                            <label style = {styles.label}>Amount:</label>
+                            <label style = {styles.label}>Current Amount:</label>
                             <input type="number" name="amount" placeholder="0" onChange={this.handleChange} style={inputStyle} />
                         </div>
                         <div style={styles.field}>

@@ -156,39 +156,46 @@ class NewEventModal extends React.Component {
     };
 
     
-
+    
   
     handleSubmit = async() => {
-            const {eventName, attendees, start, end, date, selected_room} = this.state;
-            let overlapEvent = this.checkTimeAvailable(start, end, selected_room[0], date);
-            if(eventName == '' || start == null || end == null || date == null || selected_room == null)
-            {
-                this.setState({error: "Empty Field Detected"});
-            }
-            else if(attendees <= 0)
-            {
-                this.setState({error: "Event requires at least one person attending"});
-            }
-            else if(this.timeToMinutes(end) < this.timeToMinutes(start)) 
-            {
-                this.setState({error: "Event must start before it ends"});
-            }
-            else if(attendees > this.state.selected_room[3])
-            {
-                this.setState({error: "Room does not fit enough people."});
-            }
-            else if(overlapEvent != null)
-            {
-                this.setState({error: "Event overlaps with "+ overlapEvent[1]})
-            }
-            else
-            {
-                const data = {name: eventName, attendees, start_time: start, end_time: end, date, room: selected_room[0]};
-                try {await this.addEvent(data);this.props.onClose();
-                } catch (e) {this.setState({ error: "Failed to create event" });}
-            }
+        let selectedRoom = [-1];
+        if(this.state.selected_room != null)
+        {
+            selectedRoom = this.state.rooms.find(
+                room => room[0] === Number(this.state.selected_room)
+            );
+        }        
+        const {eventName, attendees, start, end, date} = this.state;
+        let overlapEvent = this.checkTimeAvailable(start, end, selectedRoom[0], date);
+        if(eventName == '' || start == null || end == null || date == null || selectedRoom == null)
+        {
+            this.setState({error: "Empty Field Detected"});
+        }
+        else if(attendees <= 0)
+        {
+        this.setState({error: "Event requires at least one person attending"});
+        }
+        else if(this.timeToMinutes(end) < this.timeToMinutes(start)) 
+        {
+            this.setState({error: "Event must start before it ends"});
+        }
+        else if(attendees > selectedRoom[3])
+        {
+            this.setState({error: "Room does not fit enough people."});
+        }
+        else if(overlapEvent != null)
+        {
+            this.setState({error: "Event overlaps with "+ overlapEvent[1]})
+        }
+        else
+        {
+            const data = {name: eventName, attendees, start_time: start, end_time: end, date, room: selectedRoom[0]};
+            try {await this.addEvent(data);this.props.onClose();
+            } catch (e) {this.setState({ error: "Failed to create event" });}
+        }
             
-        };
+    };
 
     render() {
         if (!this.props.isOpen) return null;
@@ -204,6 +211,10 @@ class NewEventModal extends React.Component {
                 this.state.attendees <= room[3]
             );
         });
+
+        const selectedRoom = this.state.rooms.find(
+            room => room[0] === Number(this.state.selected_room)
+        );
 
         return (
             <div style={styles.backdrop}>
@@ -223,7 +234,7 @@ class NewEventModal extends React.Component {
                         
                         <div style={styles.field}>
                                 <label style={styles.label}>Date:</label>
-                                <input type="date" name="date" value={this.state.first_repeat_date}
+                                <input type="date" name="date" value={this.state.date}
                                     onChange={this.handleChange} min={new Date().toISOString().split("T")[0]}
                                     style={inputStyle} className="date-input"
                                     onKeyDown={(e) => e.preventDefault()} onPaste={(e) => e.preventDefault()}/>
@@ -264,17 +275,49 @@ class NewEventModal extends React.Component {
                         
                         <div style={styles.field}>
                             <label style={styles.label}>Room:</label>
-                            <select name="selected_room" value={this.state.selected_room || ""}
-                                onChange={this.handleChange} style={inputStyle}>
+                            <select
+                                name="selected_room"
+                                value={this.state.selected_room || ""}
+                                onChange={this.handleChange}
+                                style={inputStyle}
+                            >
                                 <option value="">Select Room</option>
 
-                                {availableRooms.map((room) => (
-                                    <option key={room[0]} value={room}>
+                                {availableRooms.map(room => (
+                                    <option key={room[0]} value={room[0]}>
                                         {room[1]}
                                     </option>
                                 ))}
                             </select>
                         </div>
+
+                        {this.state.selected_room && this.state.date && (
+                            <div style={{ display: "flex", width: "100%", marginTop: "10px" }}>
+                                <div style={{ width: "120px", marginRight: "10px" }}>
+                                    {selectedRoom[1]}
+                                </div>
+
+                                <div style={{ display: "flex", flex: 1, overflowX: "auto" }}>
+                                    {this.state.times.slice(0, -1).map((time, index) => {
+                                        const nextTime = this.state.times[index + 1];
+
+                                        const event = this.checkTimeAvailable(time, nextTime, selectedRoom[0], this.state.date);
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                title={`${time} - ${nextTime}`}
+                                                style={{flex: 1, height: "30px", width: "40px", minWidth: "40px", border: "1px solid #ccc", backgroundColor: event ? "#f44336" : "#4caf50"
+                                                }}/>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                        
+
+                        
+                        
                         
 
                         

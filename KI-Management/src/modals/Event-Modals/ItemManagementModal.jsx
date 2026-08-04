@@ -4,6 +4,7 @@ import React from "react";
 import ConfirmPopup from "../ConfirmPopup";
 import { json } from "react-router-dom";
 import NewItemModal from "./NewItemModal";
+import EditItemModal from "./EditItemModal";
 
 class ItemManagementModal extends React.Component {
     constructor(props) {
@@ -170,6 +171,16 @@ class ItemManagementModal extends React.Component {
                     </div>
                     <NewItemModal
                         isOpen={this.state.open_modal === "new"}
+                        onClose={() => {
+                            this.setState({ open_modal: "none" });
+                            this.fetchData();
+                        }}
+                    />
+
+                    <EditItemModal
+                        isOpen = {this.state.open_modal === "edit"}
+                        item = {this.state.selectedItem}
+                        size = {this.state.selectedSize}
                         onClose={() => {
                             this.setState({ open_modal: "none" });
                             this.fetchData();
