@@ -349,46 +349,31 @@ class EventsManageApi(Resource):
             return {"assigned": True}, 200
     
     def put(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('event_id', type=int)
-        parser.add_argument('item_id', type=int)
-        parser.add_argument('type', type=int) #0 for large, 1 for small
-        parser.add_argument('amount', type=int)
-        args = parser.parse_args()
-        sql = ""
-        if args['type'] == 0:
-            sql = """UPDATE event_large_items
-            SET amount = %s
-            WHERE event_id = %s
-            AND large_item_id = %s"""
+        data = request.get_json()
+        event_id = data.get("event_id")
+        items = data.get("items", [])
+        #easier to just remove and remake both if handling this with one call
+        sql = """DELETE FROM event_small_items
+            WHERE event_id = %s"""
+        exec_commit(sql, (event_id,))
+        
+        sql = """DELETE FROM event_large_items
+            WHERE event_id = %s"""
+        exec_commit(sql, (event_id,))
 
-        else:
-            sql = """UPDATE event_large_items
-            SET amount = %s
-            WHERE event_id = %s
-            AND small_item_id = %s"""
+        for item in items:
+            if item[2] == 1:
+                sql = """INSERT INTO event_small_items(event_id, small_item_id, amount)
+                VALUES (%s, %s, %s)"""
+                
+            else:
+                sql = """INSERT INTO event_large_items(event_id, large_item_id, amount)
+                    VALUES (%s, %s, %s)"""
+                            
+            exec_commit(sql, (event_id, item[1], item[3]))
 
-        exec_commit(sql, (args['amount'], args['item_id'], args['event_id']))
-        return {"status": "assigned"}, 201
+        return {"status": "edited"}, 201
     
-    def delete(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('event_id', type=int)
-        parser.add_argument('item_id', type=int)
-        parser.add_argument('type', type=int) #0 for large, 1 for small
-        args = parser.parse_args()
-
-        sql = ""
-        if args['type'] == 0:
-            sql = """DELETE FROM event_large_items
-                WHERE event_id = %s
-                AND item_id = %s"""
-        else:
-            sql = """DELETE FROM event_small_items
-                WHERE event_id = %s
-                AND item_id = %s"""
-        exec_commit(sql, (args['event_id'], args['item_id']))
-        return {"deleted": True}, 200
 
 
 class UsersApi(Resource):
@@ -666,10 +651,9 @@ class EventsApi(Resource):
         parser.add_argument('event_id', type=int)
         parser.add_argument('name', type=str)
         parser.add_argument('attendees', type=int)
-        parser.add_argument('start', type=str)
-        parser.add_argument('end', type=str)
-        parser.add_argument('start_date', type=str)
-        parser.add_argument('end_date', type=str)
+        parser.add_argument('start_time', type=str)
+        parser.add_argument('end_time', type=str)
+        parser.add_argument('date', type=str)
         args = parser.parse_args()
 
         sql = """UPDATE events
@@ -677,10 +661,10 @@ class EventsApi(Resource):
         attendees = %s,
         start_time = %s,
         end_time = %s,
-        start_date = %s,
-        end_date = %s
+        date = %s,
+        room = %s
         WHERE id = %s"""
-        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['start_date'], args['end_date'], args['event_id']))
+        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['date'], args['end_date'],  args['room'], args['event_id']))
 
         return {"updated": True}, 200
     
@@ -691,6 +675,14 @@ class EventsApi(Resource):
 
         sql = """DELETE FROM events
             WHERE id = %s"""
+        exec_commit(sql, (args['event_id'],))
+
+        sql = """DELETE FROM event_small_items
+            WHERE event_id = %s"""
+        exec_commit(sql, (args['event_id'],))
+
+        sql = """DELETE FROM event_large_items
+            WHERE event_id = %s"""
         exec_commit(sql, (args['event_id'],))
         
 

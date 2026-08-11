@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import RoomManagementModal from "../modals/Event-Modals/RoomManagementModal";
 import ItemManagementModal from "../modals/Event-Modals/ItemManagementModal";
 import NewEventModal from "../modals/Event-Modals/NewEventModal";
+import EditEventModal from "../modals/Event-Modals/EditEventModal";
 
 class Events extends React.Component {
     constructor(props) {
@@ -61,8 +62,7 @@ class Events extends React.Component {
                 curDate: today,
                 viewDate: today,
                 openModal: "none",
-                selectedRoom: null,
-                
+                selectedRoom: null,                
             });
             
             return data.events;
@@ -300,7 +300,7 @@ class Events extends React.Component {
 
                                     return (
                                         <div
-                                            onClick={() => this.setState({selectedEvent: event})}
+                                            onClick={() => this.setState({selectEvent: event})}
                                             key={timeIndex}
                                             title={`${eventName}`}
                                             style={{height: "40px", border: "1px solid #ccc", backgroundColor: event == null ? "white" : "red"}}
@@ -310,9 +310,62 @@ class Events extends React.Component {
                             </div>
                         );
                     })}
+                
                 </div>
+                {this.state.selectEvent != null &&(
+                    <div style={{border: "1px solid white", padding: "15px", backgroundColor: "#7a7676", textAlign: "center", color: "white"}}>
+                        <h4>{this.state.selectEvent[1]}</h4>
+                        <p>Room: {this.state.rooms[this.state.rooms.findIndex(room => room[0] === this.state.selectEvent[6])][1]}</p>
+                        <p>Attendees: {this.state.selectEvent[2]}</p>
+                        <p>{this.state.selectEvent[5]}</p>
+                        <p>{this.state.selectEvent[3]} - {this.state.selectEvent[4]}</p>
 
-                {/* include select event data here*/}
+                        {(
+                            this.state.smallE.some(item => item[0] === this.state.selectEvent[0]) ||
+                            this.state.largeE.some(item => item[0] === this.state.selectEvent[0])
+                        ) && (<div>
+                            <p>Required Items:</p>
+                            {this.state.smallE.map((item) =>
+                                item[0] === this.state.selectEvent[0] ? (
+                                    <div key={item[1]}>
+                                        <p>
+                                            {this.state.smallI[this.state.smallI.findIndex(count => count[0] === item[1])][1]}: {item[2]}
+                                        </p>
+                                    </div>
+                                ) : null
+                            )}
+                            {this.state.largeE.map((item) =>
+                                item[0] === this.state.selectEvent[0] ? (
+                                    <div key={item[1]}>
+                                        <p>
+                                            {this.state.largeI[this.state.largeI.findIndex(count => count[0] === item[1])][1]}: {item[2]}
+                                        </p>
+                                    </div>
+                                ) : null
+                            )}
+                        </div>)}
+
+                        {this.state.admin &&(<button
+                            style={{
+                                padding: "10px",
+                                marginBottom: "12px",
+                                cursor: "pointer",
+                                backgroundColor: "#ffb71d",
+                                color: "black",
+                                border: "none",
+                                borderRadius: "4px",
+                                boxSizing: "border-box"
+                            }}
+                            onClick={() => this.setState({openModal: "editEvent"})}
+                        >
+                            Edit Event
+                    </button>)}
+
+                    </div>
+                )}
+                
+
+
                     <RoomManagementModal
                         isOpen={this.state.openModal === "rooms"}
                         onClose={() => {
@@ -342,6 +395,24 @@ class Events extends React.Component {
                             this.fetchData();
                             this.fetchDayEvents(this.state.viewDate);
                         }}
+                    />
+                    <EditEventModal
+                        isOpen={this.state.openModal === "editEvent"}
+                        times = {this.state.times}
+                        rooms = {this.state.rooms}
+                        events = {this.state.events}
+                        overlaps = {this.state.overlaps}
+                        small = {this.state.smallI}
+                        large = {this.state.largeI}
+                        event_small = {this.state.smallE}
+                        event_large = {this.state.largeE}
+                        event = {this.state.selectEvent}
+                        onClose={() => {
+                            this.setState({ OpenModal: "none" });
+                            this.fetchData();
+                            this.fetchDayEvents(this.state.viewDate);
+                        }}
+                        onSubmit={() => {this.setState({selectEvent: null});}}
                     />
             </div>
         );

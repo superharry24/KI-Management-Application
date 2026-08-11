@@ -4,7 +4,7 @@ DROP table if EXISTS items CASCADE;
 DROP table if EXISTS item_update_log CASCADE;
 DROP table if EXISTS tasks CASCADE;
 DROP table if EXISTS task_assigned_staff CASCADE;
-DROP table if EXISTS task_required_items CASCADE;*/
+DROP table if EXISTS task_required_items CASCADE;
 DROP table if EXISTS rooms CASCADE;
 DROP table if EXISTS room_overlaps CASCADE;
 DROP table if EXISTS large_items CASCADE;
@@ -15,7 +15,7 @@ DROP table if EXISTS event_large_items CASCADE;
 
 
 
-/* commented out tables used for documentation purposes
+/* commented out tables used for documentation purposes */
 CREATE TABLE users(
     id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(30) NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE task_required_items (
     --add automatic decrease on completion?
     PRIMARY KEY(task_id, item_id)
 );
-*/
+
 
 
 CREATE TABLE rooms(
@@ -134,9 +134,7 @@ CREATE TABLE event_large_items (
     large_item_id INT REFERENCES large_items(id) ON DELETE CASCADE,
     amount INT NOT NULL,
     PRIMARY KEY(event_id, large_item_id)
-);
-
-/* for testing, remove when launched */
+);*/
 
 
 
