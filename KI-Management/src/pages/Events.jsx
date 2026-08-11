@@ -333,6 +333,10 @@ class Events extends React.Component {
                         rooms = {this.state.rooms}
                         events = {this.state.events}
                         overlaps = {this.state.overlaps}
+                        small = {this.state.smallI}
+                        large = {this.state.largeI}
+                        event_small = {this.state.smallE}
+                        event_large = {this.state.largeE}
                         onClose={() => {
                             this.setState({ OpenModal: "none" });
                             this.fetchData();

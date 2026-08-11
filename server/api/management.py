@@ -327,25 +327,26 @@ class EventsManageApi(Resource):
             "large_assign": result6,
             "small_assign": result7,
         }, 200
+    
     def post(self):
-        #assigns items to events
-        parser = reqparse.RequestParser()
-        parser.add_argument('event_id', type=int)
-        parser.add_argument('item_id', type=int)
-        parser.add_argument('type', type=int) #0 for large, 1 for small
-        parser.add_argument('amount', type=int)
-        args = parser.parse_args()
-        sql = ""
-        if args['type'] == 0:
-            sql = """INSERT INTO event_large_items(event_id, large_item_id, amount)
-            VALUES (%s, %s, %s)"""
+            data = request.get_json()
+            event_id = data.get("event_id")
+            items = data.get("items", [])
+    
+    
+            for item in items:
+                if item[2] == 1:
+                    sql = """INSERT INTO event_small_items(event_id, small_item_id, amount)
+                    VALUES (%s, %s, %s)"""
+                    
+                else:
+                    sql = """INSERT INTO event_large_items(event_id, large_item_id, amount)
+                        VALUES (%s, %s, %s)"""
+                    
+                exec_commit(sql, (event_id, item[1], item[3]))
 
-        else:
-            sql = """INSERT INTO event_small_items(event_id, small_item_id, amount)
-            VALUES (%s, %s, %s)"""
-
-        exec_commit(sql, (args['event_id'], args['item_id'], args['amount']))
-        return {"status": "assigned"}, 201
+    
+            return {"assigned": True}, 200
     
     def put(self):
         parser = reqparse.RequestParser()
@@ -359,13 +360,13 @@ class EventsManageApi(Resource):
             sql = """UPDATE event_large_items
             SET amount = %s
             WHERE event_id = %s
-            AND item_id = %s"""
+            AND large_item_id = %s"""
 
         else:
             sql = """UPDATE event_large_items
             SET amount = %s
             WHERE event_id = %s
-            AND item_id = %s"""
+            AND small_item_id = %s"""
 
         exec_commit(sql, (args['amount'], args['item_id'], args['event_id']))
         return {"status": "assigned"}, 201
@@ -654,10 +655,11 @@ class EventsApi(Resource):
         args = parser.parse_args()
 
         sql = """INSERT INTO events(name, attendees, start_time, end_time, date, room_id)
-        VALUES (%s, %s, %s, %s, %s, %s)"""
-        exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['date'], args['room']))
+        VALUES (%s, %s, %s, %s, %s, %s)
+        RETURNING id"""
+        event_id = exec_commit(sql, (args['name'], args['attendees'], args['start_time'], args['end_time'], args['date'], args['room']), returning = True)
 
-        return {"created": True}, 200
+        return {"created": True, "id": event_id}, 200
     
     def put(self):
         parser = reqparse.RequestParser()

@@ -57,7 +57,6 @@ class AssignStaffModal extends React.Component {
         }
         else
         {
-            console.log(this.state.selected_users);
 
             await fetch("http://localhost:5000/task", {
                 method: "POST",
