@@ -27,27 +27,12 @@ export default function SortListModal({
 
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999
-      }}
+      style={{position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.4)",
+        display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999}}
     >
       <div
-        style={{
-          width: "400px",
-          backgroundColor: "white",
-          borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.25)"
-        }}
+        style={{width: "400px", backgroundColor: "white", borderRadius: "12px",
+          padding: "24px", boxShadow: "0 4px 20px rgba(0,0,0,0.25)"}}
       >
         <h2 style={{ marginBottom: "20px", color: "black"}}>
           Sort & Filter
@@ -61,21 +46,12 @@ export default function SortListModal({
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             placeholder="Enter text..."
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "4px"
-            }}
+            style={{width: "100%", padding: "8px", marginTop: "4px"}}
           />
         </div>
             <div style={{ marginTop: "10px" }}>
             <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
+                style={{display: "flex", alignItems: "center", gap: "8px", cursor: "pointer"}}
             >
                 <input
                     type="checkbox"
@@ -90,12 +66,7 @@ export default function SortListModal({
             </label>
 
             <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
+                style={{display: "flex", alignItems: "center", gap: "8px", cursor: "pointer"}}
             >
                 <input
                     type="checkbox"
@@ -108,33 +79,19 @@ export default function SortListModal({
                 Prioritize Low Stock
 
             </label>
-            <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
-            >
-                <input
-                    type="checkbox"
+            <label style={{display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+                <input type="checkbox"
                     checked={lowStockOnly}
                     onChange={(e) =>
                         setLowStockOnly(e.target.checked)
                     }
                 />
-
                 Only Show Low Stock
-
             </label>
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "12px"
-          }}
+          style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px"}}
         >
           <div>
             <label>Direction</label>
@@ -142,11 +99,7 @@ export default function SortListModal({
             <select
               value={sortDirection}
               onChange={(e) => setSortDirection(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginTop: "4px"
-              }}
+              style={{width: "100%", padding: "8px", marginTop: "4px"}}
             >
               <option value="ASC">ASC</option>
               <option value="DESC">DESC</option>
@@ -159,11 +112,7 @@ export default function SortListModal({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginTop: "4px"
-              }}
+              style={{width: "100%", padding: "8px", marginTop: "4px"}}
             >
               <option value="Alphabetical">Alphabetical</option>
               <option value="Current Amount">Units On Hand</option>
@@ -176,12 +125,7 @@ export default function SortListModal({
         </div>
 
         <div
-          style={{
-            marginTop: "24px",
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "10px"
-          }}
+          style={{marginTop: "24px", display: "flex", justifyContent: "flex-end", gap: "10px"}}
         >
           <button onClick={onClose}>
             Cancel

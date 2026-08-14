@@ -67,8 +67,6 @@ class ItemManagementModal extends React.Component {
                         Small Items
                     </h2>
 
-                    
-
                     <div
                         style={{flex: 1, overflowY: "auto", marginBottom: "20px"}}
                     >
@@ -196,13 +194,6 @@ class ItemManagementModal extends React.Component {
         )
     }
 }
-
-const styles = {
-
-
-
-};
-
 
 
 export default ItemManagementModal;

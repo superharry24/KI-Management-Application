@@ -80,52 +80,25 @@ class AssignStaffModal extends React.Component {
 
         return (
             <div
-                style={{
-                    position: "fixed",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 99999
-                }}
+                style={{position: "fixed", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    display: "flex", justifyContent: "center", alignItems: "center", zIndex: 99999}}
             >
                 <div
-                    style={{
-                        
-                        width: "800px",
-                        maxWidth: "90vw",
-                        height: "700px",
-                        maxHeight: "90vh",
-                        backgroundColor: "white",
-                        borderRadius: "12px",
-                        padding: "24px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}
+                    style={{width: "800px", maxWidth: "90vw", height: "700px", maxHeight: "90vh",
+                        backgroundColor: "white", borderRadius: "12px", padding: "24px",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column"}}
                 >
                     <h2 style={{ color: "#000000", marginBottom: "20px" }}>
                         Users
                     </h2>
 
                     <div
-                        style={{
-                            flex: 1,
-                            overflowY: "auto",
-                            marginBottom: "20px"
-                        }}
+                        style={{flex: 1, overflowY: "auto", marginBottom: "20px"}}
                     >
                         {/*Headers */}
                         <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                fontWeight: "bold",
-                                padding: "10px 0",
-                                borderBottom: "2px solid #ccc",
-                                marginBottom: "5px"
-                            }}
+                            style={{display: "flex", justifyContent: "space-between", fontWeight: "bold",
+                                padding: "10px 0", borderBottom: "2px solid #ccc", marginBottom: "5px"}}
                         >
                             <div>Username</div>
                             <div>Assign</div>
@@ -134,13 +107,8 @@ class AssignStaffModal extends React.Component {
                         {this.state.userList.map((user) => (
                             <div
                                 key={user[0]}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    borderBottom: "1px solid #ddd",
-                                    padding: "10px 0"
-                                }}
+                                style={{display: "flex", justifyContent: "space-between", alignItems: "center",
+                                    borderBottom: "1px solid #ddd", padding: "10px 0"}}
                             >
                                 <div>
                                     {user[1]}                                    
@@ -159,11 +127,7 @@ class AssignStaffModal extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
+                        style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}
                     >
                         {this.state.error && (
                             <div style={{ color: "red", marginBottom: "8px" }}>
@@ -173,51 +137,27 @@ class AssignStaffModal extends React.Component {
 
                         <button
                             onClick={this.assign}
-                            style={{
-                                backgroundColor: "#38dc35",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
+                            style={{backgroundColor: "#38dc35", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}
                         >
                             Assign
                         </button>
 
                         <button
                             onClick={this.props.onClose}
-                            style={{
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
+                            style={{backgroundColor: "#dc3545", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}
                         >
                             Close
                         </button>
                     </div>
                 </div>
-
-                
-
-                 
+  
             </div>
-           
-                 
-            
-
         )
     }
 }
 
-const styles = {
-
-
-
-};
 
 
 

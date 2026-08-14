@@ -27,7 +27,7 @@ api.add_resource(OverlapApi,'/overlap')
 if __name__ == '__main__':
 
     print("Loading db")
-    exec_sql_file('management.sql')
+    #exec_sql_file('management.sql')
     print("Starting flask")
     app.run(debug=True)
 

@@ -100,32 +100,19 @@ class Signup extends React.Component {
           {/* Username */}
           <div style={{ display: "flex", flexDirection: "column" }}>
             <label>Username</label>
-            <input
-              name="name"
-              type="text"
-              onChange={this.handleChange}
-            />
+            <input name="name" type="text" onChange={this.handleChange}/>
           </div>
 
           {/* Password */}
           <div style={{ display: "flex", flexDirection: "column" }}>
             <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              onChange={this.handleChange}
-            />
+            <input name="password" type="password" onChange={this.handleChange}/>
           </div>
 
           {/* Admin checkbox */}
           <div>
             <label>
-              <input
-                type="checkbox"
-                name="admin"
-                checked={this.state.admin}
-                onChange={this.handleChange}
-              />
+              <input type="checkbox" name="admin" checked={this.state.admin} onChange={this.handleChange}/>
               Is Admin?
             </label>
           </div>

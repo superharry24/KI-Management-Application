@@ -394,7 +394,7 @@ class NewEventModal extends React.Component {
                         
                         <div style={styles.field}>
                                 <label style={styles.label}>Date:</label>
-                                <input type="date" name="date" value={this.state.date}
+                                <input type="date" name="date" value={this.state.date || ""}
                                     onChange={this.handleChange} min={new Date().toISOString().split("T")[0]}
                                     style={inputStyle} className="date-input"
                                     onKeyDown={(e) => e.preventDefault()} onPaste={(e) => e.preventDefault()}/>
@@ -492,8 +492,7 @@ class NewEventModal extends React.Component {
                         
                         <div style={styles.field}>
                             <label style={styles.label}>Room:</label>
-                            <select
-                                name="selected_room"
+                            <select name="selected_room"
                                 value={this.state.selected_room || ""}
                                 onChange={this.handleChange}
                                 style={inputStyle}
@@ -535,12 +534,6 @@ class NewEventModal extends React.Component {
                         {selectedRoom &&(
                             <p>Large Item limit: {selectedRoom[2]}</p>
                         )}
-                        
-
-                        
-                        
-                        
-
                         
                     </div>
 

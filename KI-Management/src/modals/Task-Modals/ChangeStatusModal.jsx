@@ -140,46 +140,19 @@ class ChangeStatusModal extends React.Component {
 }
 
 const styles = {
-    backdrop: {
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "10px"
-    },
-    modal: {
-        width: "100%",
-        background: "transparent",
-        border: "transparent",
-        borderRadius: "8px",
-        boxShadow: "transparent",
-        padding: "12px"
-    },
-    actions: {
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "8px"
-    },
-    submit: {
-        flex: 1,
-        background: "#4caf50",
-        color: "white",
-        border: "none",
-        padding: "6px",
-        borderRadius: "4px",
-        cursor: "pointer"
-    },
-    cancel: {
-        flex: 1,
-        background: "#000000",
-        color: "white",
-        border: "none",
-        padding: "6px",
-        borderRadius: "4px",
-        cursor: "pointer"
-    }
-
-
+    backdrop: {width: "100%", display: "flex", justifyContent: "center", marginTop: "10px"},
+    modal: {width: "100%", background: "transparent", border: "transparent",
+        borderRadius: "8px", boxShadow: "transparent", padding: "12px"},
+    form: {display: "flex", flexDirection: "column", gap: "6px", marginBottom: "10px"},
+    actions: {display: "flex", justifyContent: "space-between", gap: "8px"},
+    submit: {flex: 1, background: "#4caf50", color: "white", border: "none",
+        padding: "6px", borderRadius: "4px", cursor: "pointer"},
+    cancel: {flex: 1, background: "#f44336", color: "white", border: "none",
+        padding: "6px", borderRadius: "4px", cursor: "pointer"},
+    field: {display: "flex", flexDirection: "column", gap: "2px"},
+    label: {color: "white", fontSize: "14px", textAlign: "left", marginBottom: "2px"}
 };
+
 
 
 export default ChangeStatusModal;

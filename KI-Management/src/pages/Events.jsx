@@ -166,49 +166,28 @@ class Events extends React.Component {
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "40px"}}>
                 <div style={{flexDirection: "row", display: "flex"}}>
                     {this.state.admin &&(<button
-                            style={{
-                                padding: "10px",
-                                marginBottom: "12px",
-                                cursor: "pointer",
-                                backgroundColor: "#5563ff",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "4px",
-                                boxSizing: "border-box"
-                            }}
-                            onClick={() => this.setState({openModal: "rooms"})}
+                        style={{padding: "10px", marginBottom: "12px", cursor: "pointer",
+                                backgroundColor: "#5563ff", color: "black", border: "none",
+                                borderRadius: "4px", boxSizing: "border-box"}}
+                        onClick={() => this.setState({openModal: "rooms"})}
                         >
                             Manage Rooms
                     </button>)}
 
                     {this.state.admin &&(<button
-                            style={{
-                                padding: "10px",
-                                marginBottom: "12px",
-                                cursor: "pointer",
-                                backgroundColor: "#3fff1d",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "4px",
-                                boxSizing: "border-box"
-                            }}
-                            onClick={() => this.setState({openModal: "items"})}
+                        style={{padding: "10px", marginBottom: "12px", cursor: "pointer",
+                                backgroundColor: "#3fff1d", color: "black", border: "none",
+                                borderRadius: "4px", boxSizing: "border-box"}}
+                        onClick={() => this.setState({openModal: "items"})}
                         >
                             Manage Items
                     </button>)}
 
                     {this.state.admin &&(<button
-                            style={{
-                                padding: "10px",
-                                marginBottom: "12px",
-                                cursor: "pointer",
-                                backgroundColor: "#ecff1d",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "4px",
-                                boxSizing: "border-box"
-                            }}
-                            onClick={() => this.setState({openModal: "newEvent"})}
+                        style={{padding: "10px", marginBottom: "12px", cursor: "pointer",
+                                backgroundColor: "#ecff1d",  color: "black", border: "none",
+                                borderRadius: "4px", boxSizing: "border-box"}}
+                        onClick={() => this.setState({openModal: "newEvent"})}
                         >
                             New Event
                     </button>)}
@@ -282,8 +261,7 @@ class Events extends React.Component {
                                 }
                                 style={{display: "flex", alignItems: "center", paddingLeft: "5px",
                                     fontWeight: "bold", cursor: "pointer",
-                                    backgroundColor:
-                                        this.state.selectedRoom === roomIndex ? "#dbeafe" : "transparent"
+                                    backgroundColor: this.state.selectedRoom === roomIndex ? "#dbeafe" : "transparent"
                                 }}
                             >
                                 {room[1]}
@@ -346,16 +324,8 @@ class Events extends React.Component {
                         </div>)}
 
                         {this.state.admin &&(<button
-                            style={{
-                                padding: "10px",
-                                marginBottom: "12px",
-                                cursor: "pointer",
-                                backgroundColor: "#ffb71d",
-                                color: "black",
-                                border: "none",
-                                borderRadius: "4px",
-                                boxSizing: "border-box"
-                            }}
+                            style={{padding: "10px", marginBottom: "12px", cursor: "pointer", backgroundColor: "#ffb71d",
+                                color: "black", border: "none", borderRadius: "4px", boxSizing: "border-box"}}
                             onClick={() => this.setState({openModal: "editEvent"})}
                         >
                             Edit Event

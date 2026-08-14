@@ -55,52 +55,25 @@ class RoomManagementModal extends React.Component {
 
         return (
             <div
-                style={{
-                    position: "fixed",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 99999
-                }}
+                style={{position: "fixed", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.5)", display: "flex",
+                    justifyContent: "center", alignItems: "center", zIndex: 99999}}
             >
                 <div
-                    style={{
-                        
-                        width: "800px",
-                        maxWidth: "90vw",
-                        height: "700px",
-                        maxHeight: "90vh",
-                        backgroundColor: "white",
-                        borderRadius: "12px",
-                        padding: "24px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}
+                    style={{width: "800px", maxWidth: "90vw", height: "700px", maxHeight: "90vh",
+                        backgroundColor: "white", borderRadius: "12px", mpadding: "24px",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column"}}
                 >
                     <h2 style={{ color: "#000000", marginBottom: "20px" }}>
                         Rooms
                     </h2>
 
                     <div
-                        style={{
-                            flex: 1,
-                            overflowY: "auto",
-                            marginBottom: "20px"
-                        }}
+                        style={{flex: 1, overflowY: "auto", marginBottom: "20px"}}
                     >
                         {/*Headers */}
                         <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                fontWeight: "bold",
-                                padding: "10px 0",
-                                borderBottom: "2px solid #ccc",
-                                marginBottom: "5px"
-                            }}
+                            style={{display: "flex", justifyContent: "space-between", fontWeight: "bold",
+                                padding: "10px 0", borderBottom: "2px solid #ccc", marginBottom: "5px"}}
                         >
                             <div>Name</div>
                         </div>
@@ -134,13 +107,8 @@ class RoomManagementModal extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
-                    >
-                        
+                        style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}
+                    >                       
 
                         <button
                             onClick={() => this.setState({open_modal: "new"})}
@@ -191,8 +159,6 @@ class RoomManagementModal extends React.Component {
     }
 }
 
-const styles = {
-};
 
 
 

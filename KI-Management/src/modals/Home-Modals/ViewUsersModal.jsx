@@ -39,52 +39,24 @@ class ViewUsersModal extends React.Component {
 
         return (
             <div
-                style={{
-                    position: "fixed",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 99999
-                }}
+                style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    display: "flex", justifyContent: "center", alignItems: "center", zIndex: 99999}}
             >
                 <div
-                    style={{
-                        
-                        width: "800px",
-                        maxWidth: "90vw",
-                        height: "700px",
-                        maxHeight: "90vh",
-                        backgroundColor: "white",
-                        borderRadius: "12px",
-                        padding: "24px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}
+                    style={{width: "800px", maxWidth: "90vw", height: "700px", backgroundColor: "white", borderRadius: "12px",
+                        padding: "24px", boxShadow: "0 4px 20px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column"}}
                 >
                     <h2 style={{ color: "#000000", marginBottom: "20px" }}>
                         Current Active Users
                     </h2>
 
                     <div
-                        style={{
-                            flex: 1,
-                            overflowY: "auto",
-                            marginBottom: "20px"
-                        }}
+                        style={{flex: 1, overflowY: "auto", marginBottom: "20px"}}
                     >
                         {/*Headers */}
                         <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                fontWeight: "bold",
-                                padding: "10px 0",
-                                borderBottom: "2px solid #ccc",
-                                marginBottom: "5px"
-                            }}
+                            style={{display: "flex", justifyContent: "space-between", fontWeight: "bold",
+                                padding: "10px 0", borderBottom: "2px solid #ccc", marginBottom: "5px"}}
                         >
                             <div>Username</div>
                             <div>Last Login</div>
@@ -93,23 +65,14 @@ class ViewUsersModal extends React.Component {
                         {this.state.userList.map((user) => (
                             <div
                                 key={user[0]}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    borderBottom: "1px solid #ddd",
-                                    padding: "10px 0"
-                                }}
+                                style={{display: "flex", justifyContent: "space-between", alignItems: "center",
+                                    borderBottom: "1px solid #ddd", padding: "10px 0"}}
                             >
                                 <div>
                                     {user[1]}
                                     {user[2] && (
                                         <span
-                                            style={{
-                                                marginLeft: "10px",
-                                                color: "#dc3545",
-                                                fontWeight: "bold"
-                                            }}
+                                            style={{marginLeft: "10px", color: "#dc3545", fontWeight: "bold"}}
                                         >
                                             ADMIN
                                         </span>
@@ -126,23 +89,13 @@ class ViewUsersModal extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
+                        style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}
                     >
 
                         <button
                             onClick={this.props.onClose}
-                            style={{
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
+                            style={{backgroundColor: "#dc3545", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}
                         >
                             Close
                         </button>
@@ -160,13 +113,6 @@ class ViewUsersModal extends React.Component {
         )
     }
 }
-
-const styles = {
-
-
-
-};
-
 
 
 export default ViewUsersModal;

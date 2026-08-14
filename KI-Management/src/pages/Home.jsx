@@ -46,14 +46,8 @@ class Home extends React.Component {
 
             {this.state.admin &&(
             <button
-                        style={{
-                        flex: 1,
-                        padding: "6px",
-                        backgroundColor: "#252525",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px"
-                    }}
+                    style={{flex: 1, padding: "6px", backgroundColor: "#252525", color: "white",
+                        border: "none", borderRadius: "4px"}}
                     onClick={() => this.props.navigate("/signup")}
                 >
                                 
@@ -63,14 +57,8 @@ class Home extends React.Component {
             )}
             {this.state.admin &&(
             <button
-                        style={{
-                        flex: 1,
-                        padding: "6px",
-                        backgroundColor: "#656464",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px"
-                    }}
+                    style={{flex: 1, padding: "6px", backgroundColor: "#656464", color: "white",
+                        border: "none", borderRadius: "4px"}}
                     onClick={() => this.setState({userModalOpen: true})}
                 >
                                 

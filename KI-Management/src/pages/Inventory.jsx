@@ -497,37 +497,18 @@ class Inventory extends React.Component {
                                 showSortModal: true
                             })
                         }
-                        style={{
-                            width: "100%",
-                            marginBottom: "10px",
-                            padding: "8px",
-                            backgroundColor: "#607d8b",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer"
-                        }}
-                    >
+                        style={{width: "100%", marginBottom: "10px", padding: "8px", backgroundColor: "#607d8b",
+                            color: "white", border: "none", borderRadius: "4px", cursor: "pointer"}}>
                         Sort List
                     </button>
 
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontWeight: "bold",
-                        padding: "5px"
-                    }}>
+                    <div style={{display: "flex", justifyContent: "space-between",
+                        fontWeight: "bold", padding: "5px"}}>
                         <span>Name</span>
                         <span>Units on Hand</span>
                     </div>
 
-                    <div
-                        style={{
-                            border: "1px solid #ccc",
-                            height: "50vh",
-                            overflowY: "auto"
-                        }}
-                    >
+                    <div style={{border: "1px solid #ccc", height: "50vh", overflowY: "auto"}}>
                         {this.state.list?.map((item, index) => (
                             <div
                                 key={index}
@@ -547,13 +528,8 @@ class Inventory extends React.Component {
                                 }}
                                 onMouseEnter={() => this.setState({ hoveredIndex: index })}
                                 onMouseLeave={() => this.setState({ hoveredIndex: null })}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    padding: "6px 8px",
-                                    fontSize: "13px",
-                                    cursor: "pointer",
-                                    borderBottom: "1px solid #eee",
+                                style={{display: "flex", justifyContent: "space-between", padding: "6px 8px",
+                                    fontSize: "13px", cursor: "pointer", borderBottom: "1px solid #eee",
 
                                     backgroundColor:
                                         this.state.selectedIndex === index
@@ -566,13 +542,7 @@ class Inventory extends React.Component {
                                 <span>
                                     {item[1]}
                                     {(item[4] < item[5]) && (
-                                        <span
-                                            style={{
-                                                color: "red",
-                                                marginLeft: "8px",
-                                                fontWeight: "bold"
-                                            }}
-                                        >
+                                        <span style={{color: "red", marginLeft: "8px", fontWeight: "bold"}}>
                                             ⚠ Low Stock
                                         </span>
                                     )}
@@ -584,15 +554,9 @@ class Inventory extends React.Component {
                     <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
                                 <button
                                 disabled={!this.state.selectedItem || !this.state.admin}
-                                style={{
-                                    flex: 1,
-                                    padding: "6px",
-                                    cursor: this.state.selectedItem ? "pointer" : "not-allowed",
+                                style={{flex: 1, padding: "6px", cursor: this.state.selectedItem ? "pointer" : "not-allowed",
                                     backgroundColor: (this.state.selectedItem && this.state.admin) ? "#4caf50" : "#ccc",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px"
-                                }}
+                                    color: "white", border: "none", borderRadius: "4px"}}
                                 onClick={() => this.setState({ OpenModal: "increase" })}
                             >
                                 Add stock
@@ -600,15 +564,10 @@ class Inventory extends React.Component {
 
                             <button
                                 disabled={!this.state.selectedItem || !this.state.admin}
-                                style={{
-                                    flex: 1,
-                                    padding: "6px",
+                                style={{flex: 1,padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
                                     backgroundColor: (this.state.selectedItem && this.state.admin) ? "#f6ff00" : "#ccc",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px"
-                                }}
+                                    color: "white", border: "none", borderRadius: "4px"}}
                                 onClick={() => this.setState({ OpenModal: "decrease" })}
                             >
                                 Remove stock
@@ -616,15 +575,10 @@ class Inventory extends React.Component {
 
                             <button
                                 disabled={!this.state.selectedItem || !this.state.admin}
-                                style={{
-                                    flex: 1,
-                                    padding: "6px",
+                                style={{flex: 1, padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
                                     backgroundColor: (this.state.selectedItem && this.state.admin) ? "#2196f3" : "#ccc",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px"
-                                }}
+                                    color: "white", border: "none", borderRadius: "4px"}}
                                 onClick={() => this.setState({ OpenModal: "edit" })}
                             >
                                 
@@ -635,15 +589,10 @@ class Inventory extends React.Component {
                     <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
                         <button
                                 disabled={!this.state.selectedItem || !this.state.admin}
-                                style={{
-                                    flex: 1,
-                                    padding: "6px",
+                                style={{flex: 1, padding: "6px",
                                     cursor: this.state.selectedItem ? "pointer" : "not-allowed",
                                     backgroundColor: (this.state.selectedItem && this.state.admin) ? "#f32121" : "#ccc",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px"
-                                }}
+                                    color: "white", border: "none", borderRadius: "4px"}}
                                 onClick={() => this.setState({ OpenModal: "delete" })}
                             >
                                 
@@ -655,45 +604,25 @@ class Inventory extends React.Component {
     
                     <button
                         disabled={!this.state.admin}
-                        style={{
-                            flex: 1,
-                            padding: "6px",
-                            backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer"
-                        }}
+                        style={{flex: 1,
+                            padding: "6px", backgroundColor: this.state.admin ? "#673ab7" : "#ccc",
+                            color: "white", border: "none", borderRadius: "4px", cursor: "pointer"}}
                         onClick={() => this.setState({ OpenModal: "add" })}
                     >
                         Add new Item
                     </button>
 
                     <button
-                        style={{
-                            flex: 1,
-                            padding: "6px",
-                            backgroundColor: "#95a01d",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer"
-                        }}
+                        style={{flex: 1, padding: "6px", backgroundColor: "#95a01d", color: "white",
+                            border: "none", borderRadius: "4px", cursor: "pointer"}}
                         onClick={() => this.setState({ showUpdateLog: true })}
                     >
                         Update Log
                     </button>
 
                     <button
-                        style={{
-                            flex: 1,
-                            padding: "6px",
-                            backgroundColor: "#607d8b",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer"
-                        }}
+                        style={{flex: 1, padding: "6px", backgroundColor: "#607d8b", color: "white",
+                            border: "none", borderRadius: "4px", cursor: "pointer"}}
                         onClick={() => this.setState({ OpenModal: "export" })}
                     >
                         Export List
@@ -703,20 +632,10 @@ class Inventory extends React.Component {
                 </div>
 
                 {/* RIGHT SIDE */}
-                <div style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    minWidth: "300px"
-                }}>
+                <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "10px", minWidth: "300px"}}>
 
                     {/* ITEM DETAILS PANEL */}
-                    <div style={{
-                        border: "1px solid #ccc",
-                        padding: "10px",
-                        height: "fit-content"
-                    }}>
+                    <div style={{border: "1px solid #ccc", padding: "10px", height: "fit-content"}}>
                         {this.state.selectedItem ? (
                             <div>
                                 <h3>{this.state.selectedItem[1]}</h3>
@@ -737,10 +656,7 @@ class Inventory extends React.Component {
                     </div>
 
                     {/* Changing MODAL PANEL */}
-                    <div style={{
-                        border: "1px solid #ccc",
-                        padding: "10px"
-                    }}>
+                    <div style={{border: "1px solid #ccc",padding: "10px"}}>
                         <AddItemModal
                             isOpen={this.state.OpenModal == "add"}
                             onClose={() => this.setState({ OpenModal: "none" })}

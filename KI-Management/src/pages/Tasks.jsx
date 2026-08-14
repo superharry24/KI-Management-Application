@@ -139,23 +139,23 @@ class Tasks extends React.Component {
         });
 
     this.setState({
-        tasks: updatedList,
-        OpenModal: "none",
-        selected_task: null
+        tasks: updatedList
     });
 }
 
     refreshSelectedTask = async () => {
-    await this.fetchData();
+        await this.fetchData();
 
-    this.setState(prev => ({
-        selected_task:
-            prev.tasks.find(
-                t => t[0] === prev.selected_task?.[0]
-            ) || null,
-        OpenModal: "info"
-    }));
-};
+        this.setState(prev => ({
+            selected_task:
+                prev.tasks.find(
+                    t => t[0] === prev.selected_task?.[0]
+                ) || null,
+            OpenModal: "info"
+        }));
+
+        
+    };
     
 
     componentDidMount() {

@@ -139,15 +139,9 @@ class NewTaskModal extends React.Component {
                                 name="repeat_interval"
                                 value={this.state.repeat_interval}
                                 onChange={this.handleChange}
-                                style={{
-                                    width: "100%",
-                                    padding: "8px",
-                                    marginTop: "4px",
-                                    backgroundColor: "white",
-                                    color: "black",
-                                    border: "1px solid #ccc",
-                                    borderRadius: "4px"
-                                }}
+                                style={{width: "100%", padding: "8px", marginTop: "4px",
+                                    backgroundColor: "white", color: "black", border: "1px solid #ccc",
+                                    borderRadius: "4px"}}
                                 >
                                 <option value={Number(0)}>Never</option>
                                 <option value={Number(1)}>Daily</option>
@@ -164,9 +158,7 @@ class NewTaskModal extends React.Component {
                             </div>
                             <div style={styles.field}>
                                 <label style={styles.label}>First Repeat Date:</label>
-                                <input
-                                    type="date"
-                                    name="first_repeat_date"
+                                <input type="date" name="first_repeat_date"
                                     value={this.state.first_repeat_date}
                                     onChange={this.handleChange}
                                     min={new Date().toISOString().split("T")[0]}
@@ -221,72 +213,21 @@ class NewTaskModal extends React.Component {
 }
 
 const styles = {
-    backdrop: {
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "10px"
-    },
-    modal: {
-        width: "100%",
-        background: "transparent",
-        border: "transparent",
-        borderRadius: "8px",
-        boxShadow: "transparent",
-        padding: "12px"
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "6px",
-        marginBottom: "10px"
-    },
-    actions: {
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "8px"
-    },
-    submit: {
-        flex: 1,
-        background: "#4caf50",
-        color: "white",
-        border: "none",
-        padding: "6px",
-        borderRadius: "4px",
-        cursor: "pointer"
-    },
-    cancel: {
-        flex: 1,
-        background: "#f44336",
-        color: "white",
-        border: "none",
-        padding: "6px",
-        borderRadius: "4px",
-        cursor: "pointer"
-    },
-    field: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "2px"
-    },
-    label: {
-        color: "white",
-        fontSize: "14px",
-        textAlign: "left",
-        marginBottom: "2px"
-    }
-    
-
-
+    backdrop: {width: "100%", display: "flex", justifyContent: "center", marginTop: "10px"},
+    modal: {width: "100%", background: "transparent", border: "transparent",
+        borderRadius: "8px", boxShadow: "transparent", padding: "12px"},
+    form: {display: "flex", flexDirection: "column", gap: "6px", marginBottom: "10px"},
+    actions: {display: "flex", justifyContent: "space-between", gap: "8px"},
+    submit: {flex: 1, background: "#4caf50", color: "white", border: "none",
+        padding: "6px", borderRadius: "4px", cursor: "pointer"},
+    cancel: {flex: 1, background: "#f44336", color: "white", border: "none",
+        padding: "6px", borderRadius: "4px", cursor: "pointer"},
+    field: {display: "flex", flexDirection: "column", gap: "2px"},
+    label: {color: "white", fontSize: "14px", textAlign: "left", marginBottom: "2px"}
 };
 
-const inputStyle = {
-    backgroundColor: "#f0f4ff",
-    border: "1px solid #4a90e2",
-    borderRadius: "4px",
-    padding: "6px",
-    color: "#333"
-};
+const inputStyle = {backgroundColor: "#f0f4ff", border: "1px solid #4a90e2",
+    borderRadius: "4px", padding: "6px", color: "#333"};
 
 
 export default NewTaskModal;

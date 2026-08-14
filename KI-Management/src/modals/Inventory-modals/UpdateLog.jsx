@@ -96,49 +96,25 @@ class UpdateLog extends React.Component {
 
         return (
             <div
-                style={{
-                    position: "fixed",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 99999
-                }}
+                style={{position: "fixed", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    display: "flex", justifyContent: "center", alignItems: "center", zIndex: 99999}}
             >
                 <div
-                    style={{
-                        
-                        width: "800px",
-                        maxWidth: "90vw",
-                        height: "700px",
-                        maxHeight: "90vh",
-                        backgroundColor: "white",
-                        borderRadius: "12px",
-                        padding: "24px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}
+                    style={{width: "800px", maxWidth: "90vw", height: "700px", maxHeight: "90vh",
+                        backgroundColor: "white", borderRadius: "12px", padding: "24px",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.25)", display: "flex", flexDirection: "column"}}
                 >
                     <h2 style={{ color: "#000000", marginBottom: "20px" }}>
                         Update Log
                     </h2>
 
                     <div
-                        style={{
-                            flex: 1,
-                            overflowY: "auto",
-                            marginBottom: "20px"
-                        }}
+                        style={{flex: 1, overflowY: "auto", marginBottom: "20px"}}
                     >
                         {this.state.updateList.map((log) => (
                             <div
                                 key={log[0]}
-                                style={{
-                                    borderBottom: "1px solid #ddd",
-                                    padding: "10px 0"
-                                }}
+                                style={{borderBottom: "1px solid #ddd", padding: "10px 0"}}
                             >
                                 <div style={{ color: "#000" }}>
                                     <strong>{log[4]}</strong>
@@ -165,11 +141,7 @@ class UpdateLog extends React.Component {
                                 )}
 
                                 <div
-                                    style={{
-                                        color: "#666",
-                                        fontSize: "12px",
-                                        marginTop: "4px"
-                                    }}
+                                    style={{color: "#666", fontSize: "12px", marginTop: "4px"}}
                                 >
                                     {new Date(log[8]).toLocaleString()}
                                 </div>
@@ -178,11 +150,7 @@ class UpdateLog extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
+                        style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}
                     >
                         <button onClick={() =>
                             this.setState({
@@ -195,14 +163,8 @@ class UpdateLog extends React.Component {
 
                         <button
                             onClick={this.props.onClose}
-                            style={{
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 16px",
-                                borderRadius: "4px",
-                                cursor: "pointer"
-                            }}
+                            style={{backgroundColor: "#dc3545", color: "white", border: "none",
+                                padding: "8px 16px", borderRadius: "4px", cursor: "pointer"}}
                         >
                             Close
                         </button>
@@ -243,13 +205,6 @@ class UpdateLog extends React.Component {
         )
     }
 }
-
-const styles = {
-
-
-
-};
-
 
 
 export default UpdateLog;

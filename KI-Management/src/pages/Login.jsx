@@ -29,7 +29,6 @@ class Login extends React.Component {
         const data = await response.json();
 
         if (data && data.id) {
-            // success → go to home
             localStorage.setItem(
                 "user",
                 JSON.stringify({
@@ -63,21 +62,13 @@ class Login extends React.Component {
             {/* Username */}
             <div style={{ display: "flex", flexDirection: "column" }}>
                 <label>Username</label>
-                <input
-                name="name"
-                type="text"
-                onChange={this.handleChange}
-                />
+                <input name="name" type="text" onChange={this.handleChange}/>
             </div>
 
             {/* Password */}
             <div style={{ display: "flex", flexDirection: "column" }}>
                 <label>Password</label>
-                <input
-                name="password"
-                type="password"
-                onChange={this.handleChange}
-                />
+                <input name="password" type="password" onChange={this.handleChange}/>
             </div>
 
             {/* Button */}

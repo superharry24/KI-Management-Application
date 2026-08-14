@@ -53,27 +53,12 @@ export default function SortListModal({
   
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.4)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999
-      }}
+      style={{position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.4)",
+        display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999}}
     >
       <div
-        style={{
-          width: "400px",
-          backgroundColor: "white",
-          borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.25)"
-        }}
+        style={{width: "400px", backgroundColor: "white", borderRadius: "12px", padding: "24px",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.25)"}}
       >
         <h2 style={{ marginBottom: "20px" }}>
           Sort & Filter
@@ -90,26 +75,13 @@ export default function SortListModal({
           setID(-1);
         }}
         placeholder="Start typing an item name..."
-        style={{
-          width: "100%",
-          padding: "8px",
-          marginTop: "4px"
-        }}
+        style={{width: "100%", padding: "8px", marginTop: "4px"}}
       />
 
       {showSuggestions && matchingItems.length > 0 && (
         <div
-          style={{
-            position: "absolute",
-            top: "100%",
-            left: 0,
-            right: 0,
-            background: "white",
-            border: "1px solid #ccc",
-            maxHeight: "150px",
-            overflowY: "auto",
-            zIndex: 10000
-          }}
+          style={{position: "absolute", top: "100%", left: 0, right: 0, background: "white",
+            border: "1px solid #ccc", maxHeight: "150px", overflowY: "auto", zIndex: 10000}}
         >
           {matchingItems.map((item) => (
                     <div
@@ -119,10 +91,7 @@ export default function SortListModal({
                         setID(item[0]);
                         setShowSuggestions(false);
                       }}
-                      style={{
-                        padding: "8px",
-                        cursor: "pointer"
-                      }}
+                      style={{padding: "8px", cursor: "pointer"}}
                     >
                       {item[1]}
                     </div>
@@ -138,11 +107,7 @@ export default function SortListModal({
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  marginTop: "4px"
-                }}
+                style={{width: "100%", padding: "8px", marginTop: "4px"}}
               />
             </div>
 
@@ -152,21 +117,13 @@ export default function SortListModal({
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  marginTop: "4px"
-                }}
+                style={{width: "100%", padding: "8px", marginTop: "4px"}}
               />
             </div>
         
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "12px"
-          }}
+          style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px"}}
         >
           
 
@@ -176,11 +133,7 @@ export default function SortListModal({
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginTop: "4px"
-              }}
+              style={{width: "100%", padding: "8px", marginTop: "4px"}}
             >
               <option value="any">Any</option>
               <option value="adding">Adding</option>
@@ -193,12 +146,7 @@ export default function SortListModal({
         </div>
 
         <div
-          style={{
-            marginTop: "24px",
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "10px"
-          }}
+          style={{marginTop: "24px", display: "flex", justifyContent: "flex-end", gap: "10px"}}
         >
           <button onClick={onClose}>
             Cancel

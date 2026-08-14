@@ -215,11 +215,7 @@ class LinkRoomsModal extends React.Component {
                     </div>
 
                     <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}
+                        style={{display: "flex", justifyContent: "flex-end", gap: "10px"}}
                     >
                         
                         <button
@@ -257,13 +253,6 @@ class LinkRoomsModal extends React.Component {
         )
     }
 }
-
-const styles = {
-
-
-
-};
-
 
 
 export default LinkRoomsModal;

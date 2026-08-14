@@ -22,13 +22,8 @@ export default function SortTaskModal({
       style={{position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(0,0,0,0.4)",
         display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999}}>
       <div
-        style={{
-          width: "400px",
-          backgroundColor: "white",
-          borderRadius: "12px",
-          padding: "24px",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.25)"
-        }}
+        style={{width: "400px", backgroundColor: "white", borderRadius: "12px",
+          padding: "24px", boxShadow: "0 4px 20px rgba(0,0,0,0.25)"}}
       >
         <h2 style={{ marginBottom: "20px", color: "black"}}>
           Sort & Filter
@@ -42,22 +37,13 @@ export default function SortTaskModal({
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             placeholder="Enter text..."
-            style={{
-              width: "100%",
-              padding: "8px",
-              marginTop: "4px"
-            }}
+            style={{width: "100%", padding: "8px", marginTop: "4px"}}
           />
         </div>)}
             <div style={{ marginTop: "10px" }}>
 
             <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
+                style={{display: "flex", alignItems: "center", gap: "8px", cursor: "pointer"}}
             >
                 <input
                     type="checkbox"
@@ -67,16 +53,11 @@ export default function SortTaskModal({
                     }
                 />
 
-                Prioritize Assigned
+                Prioritize Assigned To Self
 
             </label>
             <label
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    cursor: "pointer"
-                }}
+                style={{display: "flex", alignItems: "center", gap: "8px",cursor: "pointer"}}
             >
                 <input
                     type="checkbox"
@@ -92,11 +73,7 @@ export default function SortTaskModal({
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "12px"
-          }}
+          style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px"}}
         >
           <div>
             <label>Direction</label>
@@ -104,11 +81,7 @@ export default function SortTaskModal({
             <select
               value={sortDirection}
               onChange={(e) => setSortDirection(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginTop: "4px"
-              }}
+              style={{width: "100%", padding: "8px", marginTop: "4px"}}
             >
               <option value="ASC">ASC</option>
               <option value="DESC">DESC</option>
@@ -121,11 +94,7 @@ export default function SortTaskModal({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginTop: "4px"
-              }}
+              style={{width: "100%", padding: "8px", marginTop: "4px"}}
             >
               <option value="Alphabetical">Alphabetical</option>
               <option value="Category">Category</option>
@@ -137,12 +106,7 @@ export default function SortTaskModal({
         </div>
 
         <div
-          style={{
-            marginTop: "24px",
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "10px"
-          }}
+          style={{marginTop: "24px", display: "flex", justifyContent: "flex-end", gap: "10px"}}
         >
           <button onClick={onClose}>
             Cancel
