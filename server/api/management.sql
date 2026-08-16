@@ -13,7 +13,7 @@ DROP table if EXISTS events CASCADE;
 DROP table if EXISTS event_small_items CASCADE;
 DROP table if EXISTS event_large_items CASCADE;
 
-
+*/
 
 /* commented out tables used for documentation purposes */
 CREATE TABLE users(
@@ -134,7 +134,7 @@ CREATE TABLE event_large_items (
     large_item_id INT REFERENCES large_items(id) ON DELETE CASCADE,
     amount INT NOT NULL,
     PRIMARY KEY(event_id, large_item_id)
-);*/
+);
 
 
 

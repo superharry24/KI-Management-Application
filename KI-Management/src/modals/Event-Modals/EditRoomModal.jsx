@@ -134,8 +134,7 @@ class EditRoomModal extends React.Component {
                         <div style={styles.field}>
                             <label style = {styles.label}>Max Large Items:</label>
                             <input type="number" name="max_large" placeholder="0" value={this.state.max_large} onChange={this.handleChange} style={inputStyle} />
-                        </div>
-                        
+                        </div>                        
                     </div>
 
                     {this.state.error && (
